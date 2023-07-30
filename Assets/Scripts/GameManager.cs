@@ -48,8 +48,7 @@ public class GameManager : MonoBehaviour
             return;
 
         var go = new GameObject { name = "GameManager" };
-        go.AddComponent<GameManager>();
-        DontDestroyOnLoad(go);
+        Instantiate(Resources.Load("GameManager"));
     }
 }
 
