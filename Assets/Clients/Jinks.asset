@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f6e3b3271bc3d479bdc70613446a32, type: 3}
+  m_Name: Jinks
+  m_EditorClassIdentifier: 
+  clientName: Jinks Arcane
+  closingPhrase: Catch you later
+  clientTier: 1
+  preferences:
+  - prefName: Loves the color blue.
+    requirements:
+    - reqType: 1
+      item: {fileID: 0}
+      color: 5
+      itemType: 0
+      count: 8
+  - prefName: Likes floor decorations and lights.
+    requirements:
+    - reqType: 2
+      item: {fileID: 0}
+      color: 0
+      itemType: 11
+      count: 2
+    - reqType: 2
+      item: {fileID: 0}
+      color: 0
+      itemType: 17
+      count: 4
+  clientMissionStrings:
+  - missionName: I BOUGHT A HOUSE!!!
+    missionDesc: You'll never believe this, but I just bought a HOUSE!!! It was actually
+      real cheap, but it's also real empty. I need your help to, you know, make it
+      look good. I know you got some good ideas in that big head of yours.
+  - missionName: Fishbones exploded. Oops
+    missionDesc: So uh....Fishbones might have went off during a, uh, totally normal...lab
+      experiment, you know. Anyway, the place is wrecked. Can you help me fix it
+      up?
+  - missionName: I GOT A NEW PLACE!
+    missionDesc: That's right man, I got a whole new place to MYSELF!! It's super
+      spacious and it's all my own andf I'm so excited to...do totally normal experiment
+      things here, yeah. It's kinda empty inside though, and I'm not a decorator
+      kinda gal, so I'm wondering if you can lend me a hand here?

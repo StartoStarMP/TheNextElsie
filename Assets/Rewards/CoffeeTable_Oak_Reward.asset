@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59d004f24b5d7b144ad71b7d6f3dee6f, type: 3}
+  m_Name: CoffeeTable_Oak_Reward
+  m_EditorClassIdentifier: 
+  rewardIcon: {fileID: -7740369541922501482, guid: d079e1dd17b9612488bb30de77008ec0, type: 3}
+  rewardName: Coffee Table (Oak)

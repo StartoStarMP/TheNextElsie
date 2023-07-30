@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f6e3b3271bc3d479bdc70613446a32, type: 3}
+  m_Name: Jace
+  m_EditorClassIdentifier: 
+  clientName: Jace Arcane
+  closingPhrase: Thanks
+  clientTier: 1
+  preferences:
+  - prefName: Loves warm colors.
+    requirements:
+    - reqType: 1
+      item: {fileID: 0}
+      color: 1
+      itemType: 0
+      count: 0
+    - reqType: 1
+      item: {fileID: 0}
+      color: 2
+      itemType: 0
+      count: 6
+    - reqType: 1
+      item: {fileID: 0}
+      color: 3
+      itemType: 0
+      count: 2
+  - prefName: Likes having plenty of places to sit.
+    requirements:
+    - reqType: 2
+      item: {fileID: 0}
+      color: 0
+      itemType: 1
+      count: 4
+    - reqType: 2
+      item: {fileID: 0}
+      color: 0
+      itemType: 14
+      count: 8
+  clientMissionStrings:
+  - missionName: New Place! Need Some Help with It.
+    missionDesc: Title says it all. Got a clean new area for myself, and I'm too
+      busy doing political stuff now to actually decorate it and all. That's where
+      you and a hefty amount of cash come in.
+  - missionName: JINKS DESTROYED MY PLACE
+    missionDesc: Ok. Jinks completely ruined my place with whatever damn gadgetry
+      she cooked up again. Gonna need help fixing it up while I hunt the terrorist
+      down.
+  - missionName: Safe House Needs Decorating
+    missionDesc: So I got moved to a safe house for the moment since I got intel
+      that a Zonnite splinter terror group might have their sights set on my place.
+      They'll probably torch it, knowing them. Anyway, this current place is a little
+      bare. Got some time to help with sprucing it up?
