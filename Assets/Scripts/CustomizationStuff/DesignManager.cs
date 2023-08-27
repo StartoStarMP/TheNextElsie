@@ -31,19 +31,14 @@ public class DesignManager : MonoBehaviour
     public string[] categoryStrings;
 
     [Header("Item Row")]
-    public RectTransform items;
+    //public RectTransform items;
     public GameObject[] categoryRows;
     public GameObject[] categoryTabs;
     private List<GameObject> wallButtons = new List<GameObject>();
-    public ItemInfo[] wallObjects;
     private List<GameObject> floorButtons = new List<GameObject>();
-    public ItemInfo[] floorObjects;
     private List<GameObject> rugButtons = new List<GameObject>();
-    public ItemInfo[] rugObjects;
     private List<GameObject> wallTileButtons = new List<GameObject>();
-    public Sprite[] wallTileSprites;
     private List<GameObject> floorTileButtons = new List<GameObject>();
-    public Sprite[] floorTileSprites;
 
     [Header("World Terrain")]
     public SpriteRenderer wall;
@@ -74,8 +69,6 @@ public class DesignManager : MonoBehaviour
 
     public void Start()
     {
-        GameManager.current.inEditMode = true;
-
         budgetSlider.maxValue = maxBudget;
         budgetSlider.value = maxBudget;
         budgetText.text = maxBudget.ToString();
@@ -90,13 +83,14 @@ public class DesignManager : MonoBehaviour
             wallButtons.Add(categoryRows[0].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < wallObjects.Length; i++)
+        for (int i = 0; i < GameManager.current.wallObjects.Length; i++)
         {
             int x = new int();
             x = i;
-            wallButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = wallObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-            wallButtons[i].transform.GetComponent<ItemButton>().itemInfo = wallObjects[i];
-            wallButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(wallObjects[x]); });
+            wallButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = GameManager.current.wallObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+            //wallButtons[i].transform.GetComponent<ItemButton>().itemInfo = wallObjects[i];
+            wallButtons[i].transform.GetComponent<ItemButton>().SetDetails(GameManager.current.wallObjects[i]);
+            wallButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(GameManager.current.wallObjects[x]); });
             wallButtons[i].gameObject.SetActive(true);
         }
 
@@ -105,13 +99,14 @@ public class DesignManager : MonoBehaviour
             floorButtons.Add(categoryRows[1].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < floorObjects.Length; i++)
+        for (int i = 0; i < GameManager.current.floorObjects.Length; i++)
         {
             int x = new int();
             x = i;
-            floorButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = floorObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-            floorButtons[i].transform.GetComponent<ItemButton>().itemInfo = floorObjects[i];
-            floorButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(floorObjects[x]); });
+            floorButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = GameManager.current.floorObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+            //floorButtons[i].transform.GetComponent<ItemButton>().itemInfo = floorObjects[i];
+            floorButtons[i].transform.GetComponent<ItemButton>().SetDetails(GameManager.current.floorObjects[i]);
+            floorButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(GameManager.current.floorObjects[x]); });
             floorButtons[i].gameObject.SetActive(true);
         }
 
@@ -120,13 +115,14 @@ public class DesignManager : MonoBehaviour
             rugButtons.Add(categoryRows[2].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < rugObjects.Length; i++)
+        for (int i = 0; i < GameManager.current.rugObjects.Length; i++)
         {
             int x = new int();
             x = i;
-            rugButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = rugObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-            rugButtons[i].transform.GetComponent<ItemButton>().itemInfo = rugObjects[i];
-            rugButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(rugObjects[x]); });
+            rugButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = GameManager.current.rugObjects[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+            rugButtons[i].transform.GetComponent<ItemButton>().itemInfo = GameManager.current.rugObjects[i];
+            rugButtons[i].transform.GetComponent<ItemButton>().SetDetails(GameManager.current.rugObjects[i]);
+            rugButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(GameManager.current.rugObjects[x]); });
             rugButtons[i].gameObject.SetActive(true);
         }
 
@@ -135,12 +131,12 @@ public class DesignManager : MonoBehaviour
             wallTileButtons.Add(categoryRows[3].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < wallTileSprites.Length; i++)
+        for (int i = 0; i < GameManager.current.wallpapers.Length; i++)
         {
             int x = new int();
             x = i;
-            wallTileButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = wallTileSprites[i];
-            wallTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeWallTiles(wallTileButtons[x].GetComponent<Button>(), wallTileSprites[x]); });
+            wallTileButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = GameManager.current.wallpapers[i].itemSprite;
+            wallTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeWallTiles(wallTileButtons[x].GetComponent<Button>(), GameManager.current.wallpapers[x].itemSprite); });
             wallTileButtons[i].gameObject.SetActive(true);
         }
 
@@ -149,12 +145,12 @@ public class DesignManager : MonoBehaviour
             floorTileButtons.Add(categoryRows[4].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < floorTileSprites.Length; i++)
+        for (int i = 0; i < GameManager.current.floorTiles.Length; i++)
         {
             int x = new int();
             x = i;
-            floorTileButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = floorTileSprites[i];
-            floorTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeFloorTiles(floorTileButtons[x].GetComponent<Button>(), floorTileSprites[x]); });
+            floorTileButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = GameManager.current.floorTiles[i].itemSprite;
+            floorTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeFloorTiles(floorTileButtons[x].GetComponent<Button>(), GameManager.current.floorTiles[x].itemSprite); });
             floorTileButtons[i].gameObject.SetActive(true);
         }
 
@@ -284,13 +280,29 @@ public class DesignManager : MonoBehaviour
             return;
         }
 
-        itemContextPopup.SetActive(true);
-        items.gameObject.SetActive(false);
-        itemContextImage.sprite = item.itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-        itemContextName.text = item.itemInfo.name;
-        itemContextCost.text = "Costs: " + item.itemInfo.cost;
-        StartPlacementTool(item.itemInfo, true);
-        RemoveItem(item);
+        //itemContextPopup.SetActive(true);
+        //items.gameObject.SetActive(false);
+        //itemContextImage.sprite = item.itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+        //itemContextName.text = item.itemInfo.name;
+        //itemContextCost.text = "Costs: " + item.itemInfo.cost;
+
+        if (item.itemsOnSurface.Count != 0)
+        {
+            Debug.Log("cannot remove, items on surface");
+            return;
+        }
+        
+        if (item.surface != null)
+        {
+            item.surface.itemsOnSurface.Remove(item);
+            StartPlacementTool(item.itemInfo, true);
+            RemoveItem(item);
+        }
+        else
+        {
+            StartPlacementTool(item.itemInfo, true);
+            RemoveItem(item);
+        }
     }
 
     public void RemoveItem(Item item)
@@ -307,7 +319,7 @@ public class DesignManager : MonoBehaviour
         }
         Destroy(item.gameObject);
         itemContextPopup.SetActive(false);
-        items.gameObject.SetActive(true);
+        //items.gameObject.SetActive(true);
     }
 
     public void SelectCategory(int idx)
@@ -534,10 +546,8 @@ public class DesignManager : MonoBehaviour
     {
         GameManager.current.inEditMode = false;
 
-        TransitionCanvas.current.Animate("blackFadeIn");
         StartCoroutine(Timer(x => designUI.SetActive(false), 0.5f));
         StartCoroutine(Timer(x => EvaluationManager.current.StartCoroutine("GatherPointsBreakdown"), 0.5f));
-        StartCoroutine(Timer(x => TransitionCanvas.current.Animate("blackFadeOut"), 0.5f));
     }
 
     IEnumerator Timer(Action<bool> assigner, float waitTime)

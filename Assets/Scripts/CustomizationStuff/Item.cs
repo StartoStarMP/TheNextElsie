@@ -5,6 +5,8 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ItemInfo itemInfo;
+    public Item surface;
+    public List<Item> itemsOnSurface = new List<Item>();
 
     public virtual void OnMouseDown()
     {

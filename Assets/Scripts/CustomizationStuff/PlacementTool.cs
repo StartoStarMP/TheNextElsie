@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlacementTool : MonoBehaviour
 {
     public int numOverlap = 0;
-    public List<BoxCollider2D> possibleSurfaces;
+    public List<Item> possibleSurfaces = new List<Item>();
     public ItemInfo selectedItem;
     public bool placementReady = false;
     public int selectedRotation = 0;
@@ -56,6 +56,8 @@ public class PlacementTool : MonoBehaviour
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, -0.5f), transform.rotation) as GameObject;
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10) + 50;
+                possibleSurfaces[0].itemsOnSurface.Add(newItem.GetComponent<Item>());
+                newItem.GetComponent<Item>().surface = possibleSurfaces[0];
             }
             else
             {
@@ -118,9 +120,9 @@ public class PlacementTool : MonoBehaviour
 
     public bool CheckIfSurfaceAvailable()
     {
-        foreach (BoxCollider2D boxCollider2D in possibleSurfaces)
+        foreach (Item item in possibleSurfaces)
         {
-            if (CheckIfBoxContainsBox(GetComponent<BoxCollider2D>(), boxCollider2D))
+            if (CheckIfBoxContainsBox(GetComponent<BoxCollider2D>(), item.transform.GetChild(1).GetComponent<BoxCollider2D>()))
             {
                 Debug.Log("ya");
                 return true;
@@ -146,19 +148,19 @@ public class PlacementTool : MonoBehaviour
             {
                 if (i == 1)
                 {
-                    Debug.Log(vertex + " is out of range, bottom left");
+                    //Debug.Log(vertex + " is out of range, bottom left");
                 }
                 else if (i == 2)
                 {
-                    Debug.Log(vertex + " is out of range, bottom right");
+                    //Debug.Log(vertex + " is out of range, bottom right");
                 }
                 else if (i == 3)
                 {
-                    Debug.Log(vertex + " is out of range, top left");
+                    //Debug.Log(vertex + " is out of range, top left");
                 }
                 else if (i == 4)
                 {
-                    Debug.Log(vertex + " is out of range, top right");
+                    //Debug.Log(vertex + " is out of range, top right");
                 }
                 return false;
             }
@@ -195,9 +197,9 @@ public class PlacementTool : MonoBehaviour
     {
         if (collision.gameObject.tag == "SurfaceHitbox")
         {
-            if (!possibleSurfaces.Contains(collision.gameObject.GetComponent<BoxCollider2D>()))
+            if (!possibleSurfaces.Contains(collision.transform.parent.GetComponent<Item>()))
             {
-                possibleSurfaces.Add(collision.gameObject.GetComponent<BoxCollider2D>());
+                possibleSurfaces.Add(collision.transform.parent.GetComponent<Item>());
             }
         }
         else
@@ -210,9 +212,9 @@ public class PlacementTool : MonoBehaviour
     {
         if (collision.gameObject.tag == "SurfaceHitbox")
         {
-            if (possibleSurfaces.Contains(collision.gameObject.GetComponent<BoxCollider2D>()))
+            if (possibleSurfaces.Contains(collision.transform.parent.GetComponent<Item>()))
             {
-                possibleSurfaces.Remove(collision.gameObject.GetComponent<BoxCollider2D>());
+                possibleSurfaces.Remove(collision.transform.parent.GetComponent<Item>());
             }
         }
         else

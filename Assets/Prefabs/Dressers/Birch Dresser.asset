@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
+  m_Name: Birch Dresser
+  m_EditorClassIdentifier: 
+  itemPrefab:
+  - {fileID: 5771104396716151637, guid: 0ab92000a9ed853428e8ddc7720b6c92, type: 3}
+  - {fileID: 5771104396716151637, guid: 6a2b6a7458be72742bfde97b41c1bad8, type: 3}
+  - {fileID: 5771104396716151637, guid: 5e58eeaa43662164d91bf364d2c1fe5c, type: 3}
+  - {fileID: 5771104396716151637, guid: 609aab29168c6874681f05c1a6a8d954, type: 3}
+  subCategories:
+  - Dressers
+  targetLayer: FloorObjects
+  cost: 45
+  colors: 0a000000
+  itemTypes: 07000000

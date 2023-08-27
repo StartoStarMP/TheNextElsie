@@ -9,7 +9,12 @@ using System.Linq;
 public class EvaluationManager : MonoBehaviour
 {
     public static EvaluationManager current;
+
+    [Header("Starting")]
     public GameObject evaluationUI;
+    public bool finishButtonOn = true;
+    public Image certifiedIcon;
+    public Animator evaluationStartAnim;
 
     [Header("Results")]
     public List<float> calculatedPathLengths;
@@ -17,19 +22,25 @@ public class EvaluationManager : MonoBehaviour
     public float roomNavigationStat;
     public Slider evaluationSlider;
     public Text breakdownText;
-    public Text rankText;
-    public Animator bgAnim;
-    public Animator sliderAnim;
+    public Animator evaluationAnim;
     public ParticleSystem confetti;
     public List<string> breakdownList = new List<string>();
     public List<int> pointList = new List<int>();
-    public Button toRecapButton;
+    public Button forwardRecapButton;
 
     [Header("Recap")]
-    public GameObject recapUI;
-    public Text missionName;
+    public RawImage evaluationRoomDisplay;
+    public int rankLevel;
+    public Text flairText;
+    public Image starsRank;
+    public Sprite[] starRankSprites;
+    public int recapPhase = 0;
     public Text scoreBreakdown;
-    public Text rankLetter;
+    public PlayerLevelSlider playerLevelSlider;
+    public GameObject playerRewards;
+    public PlayerMoneyCounter moneyCount;
+    public int[] numItemsPerCategory = new int[3];
+    public GameObject repSliders;
     public Button endMissionButton;
 
     // Start is called before the first frame update
@@ -45,6 +56,54 @@ public class EvaluationManager : MonoBehaviour
 
     }
 
+    public void StartFilling()
+    {
+        if (!finishButtonOn)
+        {
+            return;
+        }
+        StopAllCoroutines();
+        StartCoroutine(_Fill());
+    }
+
+    public void StopFilling()
+    {
+        if (!finishButtonOn)
+        {
+            return;
+        }
+
+        /*if (GetComponent<GraphicRaycaster>() == null)
+        {
+            return;
+        }*/
+
+        StopAllCoroutines();
+        StartCoroutine(_Unfill());
+    }
+
+    public IEnumerator _Fill()
+    {
+        Debug.Log("ya");
+        while (certifiedIcon.fillAmount < 1)
+        {
+            certifiedIcon.fillAmount += 0.015f;
+            yield return new WaitForSeconds(0.01f);
+        }
+        finishButtonOn = false;
+        StartCoroutine(GatherPointsBreakdown());
+    }
+
+    public IEnumerator _Unfill()
+    {
+        Debug.Log("no");
+        while (certifiedIcon.fillAmount > 0)
+        {
+            certifiedIcon.fillAmount -= 0.05f;
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
     public IEnumerator StartPointsBreakdown()
     {
         for (int i = 0; i < breakdownList.Count; i++)
@@ -53,73 +112,158 @@ public class EvaluationManager : MonoBehaviour
             evaluationSlider.value += pointList[i];
             if (evaluationSlider.value < 250)
             {
-                rankText.text = "F";
+                //rankText.text = "F";
             }
             else if (evaluationSlider.value < 500)
             {
-                rankText.text = "C";
+                //rankText.text = "C";
             }
             else if (evaluationSlider.value < 750)
             {
-                rankText.text = "B";
+                //rankText.text = "B";
             }
             else if (evaluationSlider.value < 1000)
             {
-                rankText.text = "A";
+                //rankText.text = "A";
             }
             else if (evaluationSlider.value == 1000)
             {
-                rankText.text = "S";
+                //rankText.text = "S";
             }
 
-            scoreBreakdown.text += breakdownList[i] + " + " + pointList[i] + "\n";
-            sliderAnim.SetTrigger("bounce");
+            scoreBreakdown.text += breakdownList[i] + " + " + pointList[i];
+            if (i != breakdownList.Count - 1)
+            {
+                scoreBreakdown.text += "\n";
+            }
+
+            evaluationAnim.SetTrigger("bounce");
             yield return new WaitForSeconds(1f);
         }
 
-        missionName.text = GameManager.current.currentMission.missionName;
-        bgAnim.SetTrigger("focus");
+        evaluationAnim.SetTrigger("rankReveal");
         yield return new WaitForSeconds(0.5f);
         confetti.Play();
-        sliderAnim.SetTrigger("finalBounce");
         if (evaluationSlider.value < 250)
         {
-            breakdownText.text = "Awful...";
-            rankLetter.text = "F";
+            rankLevel = 0;
+            flairText.text = "Awful...";
+            starsRank.sprite = starRankSprites[0];
         }
         else if (evaluationSlider.value < 500)
         {
-            breakdownText.text = "Ok...";
-            rankLetter.text = "C";
+            rankLevel = 1;
+            flairText.text = "Ok...";
+            starsRank.sprite = starRankSprites[1];
         }
         else if (evaluationSlider.value < 750)
         {
-            breakdownText.text = "Great!";
-            rankLetter.text = "B";
+            rankLevel = 2;
+            flairText.text = "Great!";
+            starsRank.sprite = starRankSprites[2];
         }
         else if (evaluationSlider.value < 1000)
         {
-            breakdownText.text = "Amazing!";
-            rankLetter.text = "A";
+            rankLevel = 3;
+            flairText.text = "Amazing!";
+            starsRank.sprite = starRankSprites[3];
         }
         else if (evaluationSlider.value == 1000)
         {
-            breakdownText.text = "PERFECT!!!";
-            rankLetter.text = "S";
+            rankLevel = 4;
+            flairText.text = "PERFECT!!!";
+            starsRank.sprite = starRankSprites[4];
         }
-
-        toRecapButton.gameObject.SetActive(true);
     }
 
-    public void StartRecapBreakdown()
+    public void ForwardRecap()
     {
-        TransitionCanvas.current.Animate("blackFadeIn");
-        StartCoroutine(Timer(x => recapUI.SetActive(true), 0.5f));
-        StartCoroutine(Timer(x => TransitionCanvas.current.Animate("blackFadeOut"), 0.5f));
+        StartCoroutine(ForwardRecapCoroutine());
+    }
+
+    public IEnumerator ForwardRecapCoroutine()
+    {
+        forwardRecapButton.interactable = false;
+        recapPhase += 1;
+        //SHOW SCORE BREAKDOWN
+        if (recapPhase == 1)
+        {
+            StartCoroutine(EvaluationLevelDisplayDarken());
+            yield return UIElementFlyInOut(scoreBreakdown.gameObject, true);
+
+            forwardRecapButton.interactable = true;
+        }
+        //SHOW PLAYER LEVEL
+        else if (recapPhase == 2)
+        {
+            StartCoroutine(UIElementFlyInOut(scoreBreakdown.gameObject, false));
+            yield return UIElementFlyInOut(playerLevelSlider.gameObject, true);
+
+            playerLevelSlider.AddXP(50 + 100 * rankLevel);
+            forwardRecapButton.interactable = true;
+        }
+        //SHOW REWARDS
+        else if (recapPhase == 3)
+        {
+            StartCoroutine(UIElementFlyInOut(playerLevelSlider.gameObject, false));
+            yield return UIElementFlyInOut(playerRewards, true);
+
+            moneyCount.AddMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
+            forwardRecapButton.interactable = true;
+        }
+        //SHOW REPUTATION
+        else if (recapPhase == 4)
+        {
+            StartCoroutine(UIElementFlyInOut(playerRewards, false));
+            yield return UIElementFlyInOut(repSliders, true);
+
+            repSliders.transform.GetChild(0).GetComponent<NPCRepSlider>().AddRep(numItemsPerCategory[0] * 10);
+            repSliders.transform.GetChild(1).GetComponent<NPCRepSlider>().AddRep(numItemsPerCategory[1] * 10);
+            repSliders.transform.GetChild(2).GetComponent<NPCRepSlider>().AddRep(numItemsPerCategory[2] * 10);
+
+            forwardRecapButton.interactable = true;
+        }
+        else if (recapPhase >= 5)
+        {
+            EndMission();
+        }
+    }
+
+    public IEnumerator UIElementFlyInOut(GameObject uiElement, bool flyIn)
+    {
+        if (flyIn)
+        {
+            while (uiElement.GetComponent<RectTransform>().anchoredPosition.y < 0)
+            {
+                uiElement.GetComponent<RectTransform>().anchoredPosition = new Vector3(uiElement.GetComponent<RectTransform>().anchoredPosition.x, uiElement.GetComponent<RectTransform>().anchoredPosition.y + 25, 0);
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+        else
+        {
+            while (uiElement.GetComponent<RectTransform>().anchoredPosition.y < 300)
+            {
+                uiElement.GetComponent<RectTransform>().anchoredPosition = new Vector3(uiElement.GetComponent<RectTransform>().anchoredPosition.x, uiElement.GetComponent<RectTransform>().anchoredPosition.y + 25, 0);
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+    }
+
+    public IEnumerator EvaluationLevelDisplayDarken()
+    {
+        while (evaluationRoomDisplay.color.a > 0.5f)
+        {
+            evaluationRoomDisplay.color = new Color(1, 1, 1, evaluationRoomDisplay.color.a - 0.01f);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     public IEnumerator GatherPointsBreakdown()
     {
+        evaluationStartAnim.SetTrigger("start");
+
+        yield return new WaitForSeconds(1f);
+
         evaluationUI.SetActive(true);
 
         //GET TOTAL POINT VALUE
@@ -135,6 +279,23 @@ public class EvaluationManager : MonoBehaviour
         //DECORATIONS
         AddToBreakdown("Decorations", (int)Decorations());
 
+        Item[] placedItems = Item.FindObjectsOfType<Item>();
+        foreach (Item item in placedItems)
+        {
+            if (item.itemInfo.targetLayer == "WallObjects")
+            {
+                numItemsPerCategory[0] += 1;
+            }
+            else if (item.itemInfo.targetLayer == "FloorObjects")
+            {
+                numItemsPerCategory[1] += 1;
+            }
+            else if (item.itemInfo.targetLayer == "WallObjects")
+            {
+                numItemsPerCategory[2] += 1;
+            }
+        }
+
         yield return new WaitForSeconds(1f);
         StartCoroutine(StartPointsBreakdown());
     }
@@ -147,7 +308,7 @@ public class EvaluationManager : MonoBehaviour
 
     public void EndMission()
     {
-        SceneLoader.current.LoadScene("PlayerRoom");
+        SceneLoader.current.LoadScene("PlayerRoom", LoadingScreenType.BlackScreen);
     }
 
     public void OnPathComplete(Path p)

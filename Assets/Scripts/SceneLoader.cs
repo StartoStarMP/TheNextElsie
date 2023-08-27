@@ -12,27 +12,29 @@ using TMPro;
 public class SceneLoader : MonoBehaviour
 {
     public static SceneLoader current;
+    public LoadingScreenType currentLoadingScreenType = LoadingScreenType.None;
 
-    [Header("Scene Loading References")]
-    [Tooltip("The loading screen object.")]
-    public GameObject loadingScreen;
-    [Tooltip("The loading screen canvas group.")]
-    public CanvasGroup canvasGroup;
-    [Tooltip("The loading screen progress bar.")]
-    public Slider progressBar;
-    [Tooltip("The loading screen progress text.")]
-    public TextMeshProUGUI progressText;
-    [Tooltip("The loading screen title.")]
-    public TextMeshProUGUI loadTitle;
-    [Tooltip("The loading screen sound.")]
-    public AudioClip sound;
+    [Header("Mission Preview")]
+    public MissionInfo currentMissionInfo;
+    public Text missionPreviewStatus;
+    public Text missionNameText;
+    public NPCDisplay npcDisplay;
+    public AffixManager affixesDisplay;
+    public Text dimensionsText;
+    public Text moneyText;
 
-    AsyncOperation loadingOp;
-    bool delayOver = false;
-    bool isLoading = false;
-    bool animTitleInvoked = false;
-    int curDots = 3;
-    int maxDots = 3;
+    [Header("Location Change")]
+    public bool locationChangeActive = false;
+    public int selectedLocationIdx = 0;
+    public Image nextLocationImage;
+    public Text nextLocationName;
+    public List<Image> locationIcons;
+    public List<string> locationNames;
+    public List<Sprite> locationImageSprites;
+    public List<Sprite> locationIconSprites;
+
+    //[Header("Black Screen")]
+    
 
     private void Awake()
     {
@@ -47,50 +49,105 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnLevelWasLoaded(int level)
+    {
+        if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("MissionSceneNew") && currentLoadingScreenType == LoadingScreenType.StartingMission)
+        {
+            StartMission(GameManager.current.currentMission);
+        }
+        else if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("PlayerRoom") && currentLoadingScreenType == LoadingScreenType.EndingMission)
+        {
+
+        }
+        else if (currentLoadingScreenType == LoadingScreenType.LocationChange)
+        {
+            GetComponent<Animator>().SetTrigger("locationChangeOut");
+        }
+        else if (currentLoadingScreenType == LoadingScreenType.BlackScreen)
+        {
+            GetComponent<Animator>().SetTrigger("blackFadeOut");
+        }
+        currentLoadingScreenType = LoadingScreenType.None;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //DontDestroyOnLoad(loadingScreen);
-        //DontDestroyOnLoad(loadingScreen);
-        canvasGroup.alpha = 1f;
-        loadingScreen.SetActive(false);
-        //TransitionCanvas.current.Animate("blackFadeOut");
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isLoading)
+        if (locationChangeActive)
         {
-            // Waits for the pre-load delay of 2 seconds before beginning anim for loading bar.
-            if (delayOver)
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                float progressValue = Mathf.Clamp01(loadingOp.progress * 1f);
-                progressBar.value = progressValue;
-                progressText.text = Mathf.Round(progressValue * 100) + "%";
+                ScrollLocation("up");
             }
 
-            if (!animTitleInvoked)
+            if (Input.GetKeyDown(KeyCode.S))
             {
-                InvokeRepeating("AnimTitle", 0f, 0.25f);
-                animTitleInvoked = true;
-                Debug.Log("Invoked.");
+                ScrollLocation("down");
             }
         }
     }
 
-    public void AnimTitle()
+    public void SetLocationChangeMenu(bool active)
     {
-        if (curDots < maxDots)
+        if (active)
         {
-            curDots++;
-            string dots = new string('.', curDots);
-            loadTitle.text = "LOADING" + dots;
+            GetComponent<Animator>().SetTrigger("locationChangeIn");
+            locationChangeActive = true;
         }
-        else if (curDots == maxDots)
+        else
         {
-            curDots = 0;
-            loadTitle.text = "LOADING";
+            GetComponent<Animator>().SetTrigger("locationChangeOut");
+            locationChangeActive = false;
+        }
+    }
+
+    public void ScrollLocation(string direction)
+    {
+        if (direction == "up")
+        {
+            GetComponent<Animator>().SetTrigger("locationScrollUp");
+            selectedLocationIdx = ListOffset(selectedLocationIdx, locationIconSprites.Count, 1);
+            SelectLocation(selectedLocationIdx, true);
+        }
+        else if (direction == "down")
+        {
+            GetComponent<Animator>().SetTrigger("locationScrollDown");
+            selectedLocationIdx = ListOffset(selectedLocationIdx, locationIconSprites.Count, -1);
+            SelectLocation(selectedLocationIdx, false);
+        }
+    }
+
+    public void SelectLocation(int idx = 0, bool up = true)
+    {
+        int locationsLength = locationIconSprites.Count;
+
+        if (up == true)
+        {
+            locationIcons[0].sprite = locationIconSprites[ListOffset(idx, locationsLength, locationsLength - 4)];
+            locationIcons[1].sprite = locationIconSprites[ListOffset(idx, locationsLength, -1)];
+            locationIcons[2].sprite = locationIconSprites[ListOffset(idx, locationsLength, -2)];
+            locationIcons[3].sprite = locationIconSprites[ListOffset(idx, locationsLength, -3)];
+            nextLocationName.text = locationNames[idx];
+            nextLocationImage.sprite = locationImageSprites[idx];
+
+            StartCoroutine(Timer(x => locationIcons[0].sprite = locationIconSprites[idx], 0.125f));
+        }
+        else
+        {
+            locationIcons[0].sprite = locationIconSprites[idx];
+            locationIcons[1].sprite = locationIconSprites[ListOffset(idx, locationsLength, -1)];
+            locationIcons[2].sprite = locationIconSprites[ListOffset(idx, locationsLength, -2)];
+            locationIcons[3].sprite = locationIconSprites[ListOffset(idx, locationsLength, locationsLength - 3)];
+            nextLocationName.text = locationNames[idx];
+            nextLocationImage.sprite = locationImageSprites[idx];
+
+            StartCoroutine(Timer(x => locationIcons[3].sprite = locationIconSprites[ListOffset(idx, locationsLength, -3)], 0.125f));
         }
     }
 
@@ -98,94 +155,114 @@ public class SceneLoader : MonoBehaviour
     /// Loads the specified scene.
     /// </summary>
     /// <param name="sceneName"></param>
-    public void LoadScene(string sceneName, bool noScreen = false)
+    public void LoadScene(string sceneName, LoadingScreenType loadingScreenType)
     {
-        //StartCoroutine(Timer(x => AudioHandler.current.StopMusic(), 1f));
-        if (!noScreen)
+        currentLoadingScreenType = loadingScreenType;
+
+        if (loadingScreenType == LoadingScreenType.BlackScreen)
         {
-            //AudioHandler.current.PlaySound(sound);
-            TransitionCanvas.current.Animate("blackFadeIn");
-            StartCoroutine(Timer(x => StartCoroutine(StartLoad(sceneName, true)), 1.2f));
+            GetComponent<Animator>().SetTrigger("blackFadeIn");
+            StartCoroutine(Timer(x => SceneManager.LoadScene(sceneName), 0.5f));
         }
-        //StartCoroutine(Timer(x => SceneManager.LoadScene(sceneName), 1.2f));
-        SceneManager.LoadScene(sceneName);
-        //StartCoroutine(Timer(x => TransitionCanvas.current.Animate("blackFadeOut"), 1.2f));
+        else
+        {
+            SceneManager.LoadScene(sceneName);
+        }
     }
 
-    /// <summary>
-    /// Asynchronous scene load.
-    /// </summary>
-    /// <param name="sceneName"></param>
-    /// <returns></returns>
-    IEnumerator StartLoad(string sceneName, bool wait = false)
+    public void UpdateMissionPreview(MissionInfo missionInfo)
     {
-        isLoading = true;
-
-        // Delay of 2 seconds before loading actually begins.
-        if (wait)
-        {
-            loadingScreen.SetActive(true);
-            yield return new WaitForSeconds(2);
-        }
-
-        delayOver = true;
-        loadingScreen.SetActive(true);
-        canvasGroup.alpha = 1f;
-
-        loadingOp = SceneManager.LoadSceneAsync(sceneName);
-        while (!loadingOp.isDone)
-        {
-            yield return null;
-        }
-
-        StartCoroutine(FadeScreen(0, 1, LoadingScreenFadeType.FadeOut));
-
-        isLoading = false;
-        delayOver = false;
-        animTitleInvoked = false;
+        currentMissionInfo = missionInfo;
+        missionNameText.text = missionInfo.missionName;
+        npcDisplay.CreateNPCDisplay(missionInfo.clientInfo);
+        dimensionsText.text = "Dimensions:\n" + missionInfo.gridWidth + " x " + missionInfo.gridHeight;
+        affixesDisplay.SetCurrentMissionAffixes(missionInfo.affixes);
+        affixesDisplay.PopulateAffixDisplay();
+        FindObjectOfType<RoomConstructor>().CreateRoom(missionInfo.borderSprite, missionInfo.wallSprite, missionInfo.floorSprite, missionInfo.gridWidth, missionInfo.gridHeight);
+        moneyText.text = missionInfo.missionMoney.ToString();
     }
 
-    /// <summary>
-    /// Fades the screen alpha to the specified value over time.
-    /// </summary>
-    /// <param name="endVal"></param>
-    /// <param name="dur"></param>
-    /// <returns></returns>
-    IEnumerator FadeScreen(float endVal, float dur, LoadingScreenFadeType fadeType)
+    public void OpenMissionPreview(MissionInfo missionInfo)
     {
-        float startVal = canvasGroup.alpha;
-        //float startValAudio = AudioHandler.current.soundSource.volume;
-        float time = 0;
-
-        while (time < dur)
-        {
-            /*
-            if (sound != null)
-            {
-                AudioHandler.current.soundSource.volume = Mathf.Lerp(startValAudio, endVal, time / dur);
-            }*/
-            canvasGroup.alpha = Mathf.Lerp(startVal, endVal, time / dur);
-            time += Time.deltaTime;
-            yield return null;
-        }
-        canvasGroup.alpha = endVal;
-        
-        if (fadeType == LoadingScreenFadeType.FadeOut)
-        {
-            loadingScreen.SetActive(false);
-            //AudioHandler.current.soundSource.Stop();
-            isLoading = false;
-            canvasGroup.alpha = 1;
-            progressBar.value = 0;
-            progressText.text = 0 + "%";
-        }
-        //AudioHandler.current.soundSource.volume = startValAudio;
+        missionPreviewStatus.text = "Opening...";
+        GetComponent<Animator>().SetTrigger("missionPreviewOpen");
+        UpdateMissionPreview(missionInfo);
+        StartCoroutine(Timer(x => missionPreviewStatus.text = "Accept Job", 1.25f));
     }
+
+    public void CloseMissionPreview()
+    {
+        missionPreviewStatus.text = "Closing...";
+        GetComponent<Animator>().SetTrigger("missionPreviewClose");
+    }
+
+    public void AcceptMission()
+    {
+        GetComponent<Animator>().SetTrigger("missionPreviewAccept");
+
+        StartCoroutine(Timer(x => GameManager.current.currentMission = currentMissionInfo, 1.25f));
+        StartCoroutine(Timer(x => SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission), 1.25f));
+    }
+
+    public void StartMission(MissionInfo missionInfo)
+    {
+        //roomConstructor = RoomConstructor.FindObjectOfType<RoomConstructor>();
+        missionPreviewStatus.text = "Starting...";
+        UpdateMissionPreview(missionInfo);
+        GetComponent<Animator>().SetTrigger("missionPreviewStart");
+    }
+
+    /*IEnumerator CaptureRoutine()
+    {
+        yield return new WaitForEndOfFrame();
+        try
+        {
+            currentCapture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            currentCapture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0, false);
+            currentCapture.Apply();
+            //Sprite sprite = Sprite.Create(currentCapture, new Rect(0, 0, Screen.width, Screen.height - (Screen.height * 200/1080)), new Vector2(0, 0));
+            //test.sprite = sprite;
+
+            SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Screen capture failed!");
+            Debug.LogError(e.ToString());
+        }
+    }*/
 
     IEnumerator Timer(Action<bool> assigner, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         assigner(true);
+    }
+
+    public int ListOffset(int idx, int listLength, int offset)
+    {
+        if (offset > 0)
+        {
+            for (int i = 0; i < offset; i++)
+            {
+                idx += 1;
+                if (idx >= listLength)
+                {
+                    idx = 0;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i > offset; i--)
+            {
+                idx -= 1;
+                if (idx < 0)
+                {
+                    idx = listLength - 1;
+                }
+            }
+        }
+        return idx;
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -198,7 +275,7 @@ public class SceneLoader : MonoBehaviour
     }
 }
 
-public enum LoadingScreenFadeType
+public enum LoadingScreenType
 {
-    FadeIn, FadeOut
+    StartingMission, EndingMission, LocationChange, BlackScreen, None
 }

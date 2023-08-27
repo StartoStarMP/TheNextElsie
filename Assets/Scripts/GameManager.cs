@@ -15,10 +15,16 @@ public class GameManager : MonoBehaviour
     [Tooltip("If true, will enable MouseHover checks in Item script. False by default.")]
     public bool inEditMode = false;
 
+    [Header("Items")]
+    public ItemInfo[] wallObjects;
+    public ItemInfo[] floorObjects;
+    public ItemInfo[] rugObjects;
+    public ItemInfo[] wallpapers;
+    public ItemInfo[] floorTiles;
+
     private void Awake()
     {
         current = this;
-        npcReps = new List<int>() { 10, 20, 30 };
     }
 
     // Start is called before the first frame update
@@ -33,23 +39,14 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void OnLevelWasLoaded(int level)
-    {
-        if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("MissionSceneNew"))
-        {
-            MissionPreview.current.StartMission(currentMission);
-        }
-    }
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void RuntimeInit()
     {
         if (!Debug.isDebugBuild || FindObjectOfType<GameManager>() != null)
             return;
 
-        var go = new GameObject { name = "GameManager" };
         Instantiate(Resources.Load("GameManager"));
     }
 }
 
-public enum NPCVendor { Vander, Silco, Caitlyn }
+public enum NPCVendor { Walter, Flo, Ruth }

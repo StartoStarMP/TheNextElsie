@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -104,6 +105,42 @@ public class MissionManager : MonoBehaviour
 
         newMission.gridWidth = Random.Range(3, 10);
         newMission.gridHeight = Random.Range(4, 10);
+
+        //GENERATE AFFIXES
+        int numAffixes = Random.Range(0,4);
+
+        for (int i = 0; i < numAffixes; i++)
+        {
+            Requirement newRequirement = new Requirement();
+            newRequirement.reqType = (RequirementType)Random.Range(0, (int)System.Enum.GetValues(typeof(RequirementType)).Cast<RequirementType>().Max());
+
+            if (newRequirement.reqType == RequirementType.Color)
+            {
+                newRequirement.color = (ColorType)Random.Range(0, (int)System.Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Max());
+            }
+            else if (newRequirement.reqType == RequirementType.Item)
+            {
+                newRequirement.item = GameManager.current.wallObjects[Random.Range(0, GameManager.current.wallObjects.Length)];
+            }
+            else if (newRequirement.reqType == RequirementType.ItemType)
+            {
+                newRequirement.itemType = (ItemType)Random.Range(0, (int)System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().Max());
+            }
+            else if (newRequirement.reqType == RequirementType.RoomType)
+            {
+                newRequirement.roomType = (RoomType)Random.Range(0, (int)System.Enum.GetValues(typeof(RoomType)).Cast<RoomType>().Max());
+            }
+            else if (newRequirement.reqType == RequirementType.Theme)
+            {
+                newRequirement.theme = (ThemeType)Random.Range(0, (int)System.Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().Max());
+            }
+            else if (newRequirement.reqType == RequirementType.Unique)
+            {
+                newRequirement.uniqueCondition = (UniqueConditionType)Random.Range(0, (int)System.Enum.GetValues(typeof(UniqueConditionType)).Cast<UniqueConditionType>().Max());
+            }
+
+            newMission.affixes.Add(newRequirement);
+        }
 
         //GENERATE REWARDS
         newMission.missionMoney = 50 * Random.Range(2, 10);

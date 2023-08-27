@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
+  m_Name: Oak Chair
+  m_EditorClassIdentifier: 
+  itemPrefab:
+  - {fileID: 5771104396716151637, guid: 4615fa4e4a51d07478e4129db834616c, type: 3}
+  - {fileID: 5771104396716151637, guid: 37764e77860dcb14f80124e6f21d2596, type: 3}
+  - {fileID: 5771104396716151637, guid: dbf25604ded36de47b198ac59d8b3fe8, type: 3}
+  - {fileID: 5771104396716151637, guid: e76361e58eead2c46b2680eac5313629, type: 3}
+  subCategories:
+  - Chairs
+  targetLayer: FloorObjects
+  cost: 45
+  colors: 0a000000
+  itemTypes: 01000000

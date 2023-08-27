@@ -17,22 +17,49 @@ public class Requirement
     [Header("Requirement Parameters")]
     public RequirementType reqType;
 
+    [ShowIf("reqType", RequirementType.RoomType)]
+    public RoomType roomType;
+
     [ShowIf("reqType", RequirementType.Item)]
     public ItemInfo item;
+    [ShowIf("reqType", RequirementType.Item)]
+    public int itemCount;
 
     [ShowIf("reqType", RequirementType.Color)]
     public ColorType color;
+    [ShowIf("reqType", RequirementType.Color)]
+    public float colorRatio;
+
+    [ShowIf("reqType", RequirementType.Theme)]
+    public ThemeType theme;
+    [ShowIf("reqType", RequirementType.Theme)]
+    public int themeRatio;
 
     [ShowIf("reqType", RequirementType.ItemType)]
     public ItemType itemType;
+    [ShowIf("reqType", RequirementType.ItemType)]
+    public int itemTypeCount;
 
-    public int count;
+    [ShowIf("reqType", RequirementType.Unique)]
+    public UniqueConditionType uniqueCondition;
 }
 
 [System.Serializable]
 public enum RequirementType
 {
-    Item, Color, ItemType
+    RoomType, Item, Color, Theme, ItemType, Unique
+}
+
+[System.Serializable]
+public enum RoomType
+{
+    Bedroom, Office
+}
+
+[System.Serializable]
+public enum UniqueConditionType
+{
+    OpenSpace
 }
 
 /*

@@ -58,7 +58,7 @@ public class MissionPreview : MonoBehaviour
         GetComponent<Animator>().SetTrigger("accept");
 
         StartCoroutine(Timer(x => GameManager.current.currentMission = currentMissionInfo, 1.25f));
-        StartCoroutine(Timer(x => SceneLoader.current.LoadScene("MissionSceneNew", true), 1.25f));
+        StartCoroutine(Timer(x => SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission), 1.25f));
     }
 
     public void StartMission(MissionInfo missionInfo)
@@ -80,7 +80,7 @@ public class MissionPreview : MonoBehaviour
             //Sprite sprite = Sprite.Create(currentCapture, new Rect(0, 0, Screen.width, Screen.height - (Screen.height * 200/1080)), new Vector2(0, 0));
             //test.sprite = sprite;
 
-            SceneLoader.current.LoadScene("MissionSceneNew", true);
+            SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission);
         }
         catch (System.Exception e)
         {

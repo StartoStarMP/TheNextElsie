@@ -19,6 +19,28 @@ MonoBehaviour:
   floorSprite: {fileID: -7541642142940281356, guid: 80b57187e8879ae4ab3e1b7c4ccf6e5c, type: 3}
   gridWidth: 10
   gridHeight: 8
-  affixes: []
-  missionMoney: 100
+  affixes:
+  - reqType: 0
+    roomType: 0
+    item: {fileID: 0}
+    itemCount: 0
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    itemType: 0
+    itemTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 1
+    roomType: 0
+    item: {fileID: 11400000, guid: b3f7dfad9d772af409f91f78ed876d21, type: 2}
+    itemCount: 0
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    itemType: 0
+    itemTypeCount: 0
+    uniqueCondition: 0
+  missionMoney: 90
   itemBlueprint: {fileID: 0}

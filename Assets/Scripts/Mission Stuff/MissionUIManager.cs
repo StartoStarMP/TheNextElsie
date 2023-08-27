@@ -16,9 +16,9 @@ public class MissionUIManager : MonoBehaviour
     public TextMeshProUGUI clientNameDisplay;
 
     public Transform criteriaContentArea;
-    public RequirementEntry criteriaEntryTemplate;
+    public AffixEntry criteriaEntryTemplate;
 
-    List<RequirementEntry> criteriaEntries = new List<RequirementEntry>();
+    List<AffixEntry> criteriaEntries = new List<AffixEntry>();
     public Mission mission;
 
     private void Awake()
@@ -54,12 +54,12 @@ public class MissionUIManager : MonoBehaviour
             foreach (Requirement r in criteria)
             {
                 GameObject newCriteriaEntry;
-                RequirementEntry entry;
+                AffixEntry entry;
                 newCriteriaEntry = Instantiate(criteriaEntryTemplate.gameObject, new Vector3(0, nextCriteriaEntryPos, 0), new Quaternion(0, 0, 0, 0), criteriaContentArea);
                 newCriteriaEntry.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, nextCriteriaEntryPos, 0);
-                entry = newCriteriaEntry.GetComponent<RequirementEntry>();
+                entry = newCriteriaEntry.GetComponent<AffixEntry>();
 
-                entry.SetEntryRequirement(r);
+                //entry.SetEntryRequirement(r);
                 criteriaEntries.Add(entry);
 
                 nextCriteriaEntryPos -= 50;
@@ -67,9 +67,9 @@ public class MissionUIManager : MonoBehaviour
         }
     }
 
-    public void IncreaseCriteriaProgress(ItemInfo item)
+    /*public void IncreaseCriteriaProgress(ItemInfo item)
     {
-        foreach (RequirementEntry r in criteriaEntries)
+        foreach (AffixEntry r in criteriaEntries)
         {
             r.IncreaseProgress(item);
         }
@@ -77,9 +77,9 @@ public class MissionUIManager : MonoBehaviour
 
     public void DecreaseCriteriaProgress(ItemInfo item)
     {
-        foreach (RequirementEntry r in criteriaEntries)
+        foreach (AffixEntry r in criteriaEntries)
         {
             r.DecreaseProgress(item);
         }
-    }
+    }*/
 }
