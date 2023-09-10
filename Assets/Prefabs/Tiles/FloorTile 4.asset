@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: FloorTile 4
   m_EditorClassIdentifier: 
   customType: 1
+  itemType: 4
   itemPrefab: []
-  subCategories: []
   targetLayer: 
   itemSprite: {fileID: 8010965151286131362, guid: 80b57187e8879ae4ab3e1b7c4ccf6e5c, type: 3}
   cost: 0
   colors: 
   themes: 
-  itemTypes: 
+  categoryTypes: 

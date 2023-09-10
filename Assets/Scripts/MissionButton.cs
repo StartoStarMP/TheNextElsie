@@ -28,9 +28,9 @@ public class MissionButton : MonoBehaviour
         missionAffixes.text = "";
         for(int i = 0; i < missionInfo.affixes.Count; i++)
         {
-            if (missionInfo.affixes[i].reqType == RequirementType.ItemType)
+            if (missionInfo.affixes[i].reqType == RequirementType.CategoryType)
             {
-                missionAffixes.text += "Required Item Types";
+                missionAffixes.text += "Required Category Type";
             }
             else if (missionInfo.affixes[i].reqType == RequirementType.Item)
             {

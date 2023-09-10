@@ -17,6 +17,7 @@ public class EvaluationManager : MonoBehaviour
     public Animator evaluationStartAnim;
 
     [Header("Results")]
+    public AffixManager affixManager;
     public List<float> calculatedPathLengths;
     public List<Vector3> currentPath;
     public float roomNavigationStat;
@@ -208,7 +209,8 @@ public class EvaluationManager : MonoBehaviour
             StartCoroutine(UIElementFlyInOut(playerLevelSlider.gameObject, false));
             yield return UIElementFlyInOut(playerRewards, true);
 
-            moneyCount.AddMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
+            //moneyCount.AddMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
+            GameManager.current.ChangePlayerMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
             forwardRecapButton.interactable = true;
         }
         //SHOW REPUTATION
@@ -267,7 +269,7 @@ public class EvaluationManager : MonoBehaviour
         evaluationUI.SetActive(true);
 
         //GET TOTAL POINT VALUE
-        AddToBreakdown("Total Point Value", (int)(250 * TotalPointValue() / DesignManager.current.maxBudget * 1.2f));
+        AddToBreakdown("Total Point Value", (int)(250 * TotalPointValue() / DesignManager.current.maxBudget));
         //ESSENTIAL REQUIREMENTS
         AddToBreakdown("Essentials", (int)(250 * Essentials()));
         //ROOM NAVIGATION
@@ -308,7 +310,7 @@ public class EvaluationManager : MonoBehaviour
 
     public void EndMission()
     {
-        SceneLoader.current.LoadScene("PlayerRoom", LoadingScreenType.BlackScreen);
+        SceneLoader.current.LoadScene("Home", LoadingScreenType.BlackScreen);
     }
 
     public void OnPathComplete(Path p)
@@ -405,68 +407,11 @@ public class EvaluationManager : MonoBehaviour
 
     public float Essentials()
     {
-        Item[] items = Item.FindObjectsOfType<Item>();
+        //Item[] items = Item.FindObjectsOfType<Item>();
         int currentPoints = 0;
         int maxPoints = 0;
 
-        /*foreach (Requirement requirement in GameManager.current.currentMission.affixes)
-        {
-            if (requirement.reqType == RequirementType.Item)
-            {
-                int count = 0;
-                foreach (Item item in items)
-                {
-                    if (item.itemInfo == requirement.item)
-                    {
-                        count += 1;
-                    }
-                }
-                currentPoints += count;
-                maxPoints += requirement.count;
-            }
-
-            if (requirement.reqType == RequirementType.ItemType)
-            {
-                int count = 0;
-                foreach (Item item in items)
-                {
-                    if (item.itemInfo.itemTypes.Contains(requirement.itemType))
-                    {
-                        count += 1;
-                    }
-                }
-                currentPoints += count;
-                maxPoints += requirement.count;
-            }
-
-            if (requirement.reqType == RequirementType.Color)
-            {
-                int count = 0;
-                foreach (Item item in items)
-                {
-                    if (item.itemInfo.colors.Contains(requirement.color))
-                    {
-                        count += 1;
-                    }
-                }
-                currentPoints += count;
-                maxPoints += requirement.count;
-            }
-            
-
-            //ADD EXISTING ITEMS
-
-            //ADD ROOM TYPE ESSENTIAL ITEMS
-
-            //ADD NEW REQUIREMENT TYPE THEME
-
-            Debug.Log("Essentials: " + currentPoints);
-
-            return (currentPoints/maxPoints);
-        }
-        */
-
-        return 0;
+        return affixManager.GetTotalAffixCompletionStat();
     }
 
     public int Decorations()
@@ -508,9 +453,9 @@ public class EvaluationManager : MonoBehaviour
 
         foreach (Item item in items)
         {
-            if (item.itemInfo.itemTypes.Contains(ItemType.Bed) || item.itemInfo.itemTypes.Contains(ItemType.Chair) || item.itemInfo.itemTypes.Contains(ItemType.Dresser)
-                || item.itemInfo.itemTypes.Contains(ItemType.Table) || item.itemInfo.itemTypes.Contains(ItemType.Sofa) || item.itemInfo.itemTypes.Contains(ItemType.CoffeeTable)
-                || item.itemInfo.itemTypes.Contains(ItemType.Stand) || item.itemInfo.itemTypes.Contains(ItemType.Bench))
+            if (item.itemInfo.categoryTypes.Contains(CategoryType.Bed) || item.itemInfo.categoryTypes.Contains(CategoryType.Chair) || item.itemInfo.categoryTypes.Contains(CategoryType.Dresser)
+                || item.itemInfo.categoryTypes.Contains(CategoryType.Table) || item.itemInfo.categoryTypes.Contains(CategoryType.Sofa) || item.itemInfo.categoryTypes.Contains(CategoryType.CoffeeTable)
+                || item.itemInfo.categoryTypes.Contains(CategoryType.Stand) || item.itemInfo.categoryTypes.Contains(CategoryType.Bench))
             {
                 Vector3 newPosition = new Vector3(item.transform.position.x, item.transform.position.y, 1);
                 navigablePos.Add(newPosition);

@@ -20,7 +20,7 @@ public class AffixManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void SetCurrentMissionAffixes(List<Requirement> affixes)
@@ -68,21 +68,21 @@ public class AffixManager : MonoBehaviour
                 return true;
             }
         }
-        //REQUIRED ITEM TYPE
-        else if (requirement.reqType == RequirementType.ItemType)
+        //REQUIRED CATEGORY
+        else if (requirement.reqType == RequirementType.CategoryType)
         {
             Item[] placedItems = FindObjectsOfType<Item>();
-            List<ItemType> placedItemTypes = new List<ItemType>();
+            List<CategoryType> placedItemTypes = new List<CategoryType>();
 
             foreach (Item item in placedItems)
             {
-                foreach (ItemType itemType in item.itemInfo.itemTypes)
+                foreach (CategoryType itemType in item.itemInfo.categoryTypes)
                 {
                     placedItemTypes.Add(itemType);
                 }
             }
 
-            if (placedItemTypes.Count(n => n == requirement.itemType) > requirement.itemTypeCount)
+            if (placedItemTypes.Count(n => n == requirement.categoryType) > requirement.categoryTypeCount)
             {
                 return true;
             }
@@ -91,11 +91,11 @@ public class AffixManager : MonoBehaviour
         else if (requirement.reqType == RequirementType.RoomType)
         {
             Item[] placedItems = FindObjectsOfType<Item>();
-            List<ItemType> placedItemTypes = new List<ItemType>();
+            List<CategoryType> placedItemTypes = new List<CategoryType>();
 
             foreach (Item item in placedItems)
             {
-                foreach (ItemType itemType in item.itemInfo.itemTypes)
+                foreach (CategoryType itemType in item.itemInfo.categoryTypes)
                 {
                     placedItemTypes.Add(itemType);
                 }
@@ -103,14 +103,14 @@ public class AffixManager : MonoBehaviour
 
             if (requirement.roomType == RoomType.Bedroom)
             {
-                if (placedItemTypes.Contains(ItemType.Bed))
+                if (placedItemTypes.Contains(CategoryType.Bed))
                 {
                     return true;
                 }
             }
             else if (requirement.roomType == RoomType.Office)
             {
-                if (placedItemTypes.Contains(ItemType.Table) && placedItemTypes.Contains(ItemType.Chair))
+                if (placedItemTypes.Contains(CategoryType.Table) && placedItemTypes.Contains(CategoryType.Chair))
                 {
                     return true;
                 }
@@ -146,7 +146,37 @@ public class AffixManager : MonoBehaviour
         }
         else
         {
-            GetComponent<RectTransform>().anchoredPosition = new Vector3(430, GetComponent<RectTransform>().anchoredPosition.y, 0);
+            GetComponent<RectTransform>().anchoredPosition = new Vector3(500, GetComponent<RectTransform>().anchoredPosition.y, 0);
         }
+        GetCurrentAffixesProgress();
+    }
+
+    public void GetCurrentAffixesProgress()
+    {
+        string affixesProgress = "";
+        foreach (AffixEntry affixEntry in affixEntries)
+        {
+            if (affixEntry.gameObject.activeInHierarchy)
+            {
+                affixEntry.UpdateAffixStatus();
+                affixesProgress += affixEntry.affixNameText.text + ": " + affixEntry.currentProgress + "/" + affixEntry.maxProgress + "\n";
+            }
+        }
+        Debug.Log(affixesProgress);
+    }
+
+    public float GetTotalAffixCompletionStat()
+    {
+        List<float> affixCompletionStats = new List<float>();
+
+        foreach (AffixEntry affixEntry in affixEntries)
+        {
+            if (affixEntry.gameObject.activeInHierarchy)
+            {
+                affixCompletionStats.Add(affixEntry.currentProgress/affixEntry.maxProgress);
+            }
+        }
+
+        return affixCompletionStats.Sum()/affixCompletionStats.Count;
     }
 }

@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: Blue Sofa
   m_EditorClassIdentifier: 
   customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 4c423f450a083b74b98e9c7871062166, type: 3}
   - {fileID: 5771104396716151637, guid: bc5c3564654d2744aad09b6c79d88158, type: 3}
   - {fileID: 5771104396716151637, guid: 45dd5556d363d044abf7f0bdf0d35b0b, type: 3}
   - {fileID: 5771104396716151637, guid: 74d3ceb8dc147ff4bb9341c17a217e70, type: 3}
-  subCategories:
-  - Sofas
   targetLayer: FloorObjects
   itemSprite: {fileID: 0}
   cost: 45
   colors: 05000000
   themes: 
-  itemTypes: 0e000000
+  categoryTypes: 0e000000

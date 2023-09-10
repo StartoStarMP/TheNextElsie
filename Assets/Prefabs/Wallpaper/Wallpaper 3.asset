@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Wallpaper 3
   m_EditorClassIdentifier: 
   customType: 1
+  itemType: 3
   itemPrefab: []
-  subCategories: []
   targetLayer: 
   itemSprite: {fileID: 2049100777294676907, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
   cost: 0
   colors: 
   themes: 
-  itemTypes: 
+  categoryTypes: 

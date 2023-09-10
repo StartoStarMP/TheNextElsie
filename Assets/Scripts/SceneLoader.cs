@@ -97,11 +97,13 @@ public class SceneLoader : MonoBehaviour
     {
         if (active)
         {
+            Debug.Log("ran in");
             GetComponent<Animator>().SetTrigger("locationChangeIn");
             locationChangeActive = true;
         }
         else
         {
+            Debug.Log("ran out");
             GetComponent<Animator>().SetTrigger("locationChangeOut");
             locationChangeActive = false;
         }
@@ -149,6 +151,13 @@ public class SceneLoader : MonoBehaviour
 
             StartCoroutine(Timer(x => locationIcons[3].sprite = locationIconSprites[ListOffset(idx, locationsLength, -3)], 0.125f));
         }
+    }
+
+    public void ConfirmLocation()
+    {
+        SetLocationChangeMenu(false);
+
+        StartCoroutine(Timer(x => LoadScene(locationNames[selectedLocationIdx], LoadingScreenType.BlackScreen), 0.5f));
     }
 
     /// <summary>

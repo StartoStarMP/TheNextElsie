@@ -28,19 +28,41 @@ MonoBehaviour:
     colorRatio: 0
     theme: 0
     themeRatio: 0
-    itemType: 0
-    itemTypeCount: 0
+    categoryType: 0
+    categoryTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 2
+    roomType: 0
+    item: {fileID: 0}
+    itemCount: 0
+    color: 1
+    colorRatio: 0.5
+    theme: 0
+    themeRatio: 0
+    categoryType: 0
+    categoryTypeCount: 0
     uniqueCondition: 0
   - reqType: 1
     roomType: 0
-    item: {fileID: 11400000, guid: b3f7dfad9d772af409f91f78ed876d21, type: 2}
+    item: {fileID: 11400000, guid: 21de8a7773e203543b1ce9ac4d23b42c, type: 2}
+    itemCount: 1
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    categoryType: 0
+    categoryTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 4
+    roomType: 0
+    item: {fileID: 0}
     itemCount: 0
     color: 0
     colorRatio: 0
     theme: 0
     themeRatio: 0
-    itemType: 0
-    itemTypeCount: 0
+    categoryType: 1
+    categoryTypeCount: 1
     uniqueCondition: 0
   missionMoney: 90
   itemBlueprint: {fileID: 0}

@@ -101,6 +101,7 @@ public class PlacementTool : MonoBehaviour
 
     public void SetSelectedItem(ItemInfo itemInfo, int rotation = 0)
     {
+        Debug.Log(itemInfo);
         selectedItem = itemInfo;
         selectedRotation = rotation;
         GetComponent<SpriteRenderer>().sprite = itemInfo.itemPrefab[rotation].GetComponent<SpriteRenderer>().sprite;
@@ -124,11 +125,11 @@ public class PlacementTool : MonoBehaviour
         {
             if (CheckIfBoxContainsBox(GetComponent<BoxCollider2D>(), item.transform.GetChild(1).GetComponent<BoxCollider2D>()))
             {
-                Debug.Log("ya");
+                //Debug.Log("ya");
                 return true;
             }
         }
-        Debug.Log("no");
+        //Debug.Log("no");
         return false;
     }
 

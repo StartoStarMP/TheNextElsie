@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Walnut Dresser
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 3b380d5f517557c4d917bb3b436b6a05, type: 3}
   - {fileID: 5771104396716151637, guid: 793d04e032f52e542bcea379cd141339, type: 3}
   - {fileID: 5771104396716151637, guid: 1e1270ce3968bfc41a45559a08409e43, type: 3}
   - {fileID: 5771104396716151637, guid: f24d47c4053f0be4484d81527179ea8c, type: 3}
-  subCategories:
-  - Dressers
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 0a000000
-  itemTypes: 07000000
+  themes: 
+  categoryTypes: 07000000

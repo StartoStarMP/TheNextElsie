@@ -17,12 +17,12 @@ public class TransitionCanvas : MonoBehaviour
         GetComponent<Animator>().SetTrigger(anim);
     }
     
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    /*[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void RuntimeInit()
     {
         if (!Debug.isDebugBuild || FindObjectOfType<TransitionCanvas>() != null)
             return;
 
         Instantiate(Resources.Load("TransitionCanvas"));
-    }
+    }*/
 }

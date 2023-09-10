@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Yellow Sofa
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 39fa940c71d8f7a42b9c6b1ce2eb3a30, type: 3}
   - {fileID: 5771104396716151637, guid: 7025914a5505828458af06d0179eb6dc, type: 3}
   - {fileID: 5771104396716151637, guid: a6cff4b0d433f2143a678df19e18e667, type: 3}
   - {fileID: 5771104396716151637, guid: 4bf07b9905fb5f549a5e9a16da187ca2, type: 3}
-  subCategories:
-  - Sofas
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 03000000
-  itemTypes: 0e000000
+  themes: 
+  categoryTypes: 0e000000

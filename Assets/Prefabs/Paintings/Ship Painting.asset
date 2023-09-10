@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Ship Painting
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 0
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 6da9fa85d408a0d418af00349559742b, type: 3}
-  subCategories:
-  - Paintings
   targetLayer: WallObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 05000000
-  itemTypes: 0900000010000000
+  themes: 
+  categoryTypes: 09000000

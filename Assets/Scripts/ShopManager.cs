@@ -12,26 +12,44 @@ public class ShopManager : MonoBehaviour
     public RawImage formerShopCameraView;
     public Coroutine focusingCamera;
 
+    [Header("Shop Displays")]
+    public Button[] shopCategoryButtons;
+    public GameObject purchasesDisplay;
+    public GameObject reputationDisplay;
+    public GameObject investmentsDisplay;
+
     [Header("Shop Details")]
     public Image shopLogo;
     public Image shopLogoBg;
     public Image shopViewBg;
+    public ItemType[] shopTypes;
     public Sprite[] shopLogos;
     public Sprite[] shopLogoBgs;
     public Sprite[] shopViewBgs;
     public Sprite[] shopItemBgs;
     public int currentShop = 0;
     public Transform[] shopLocations;
+    public Transform[] shopItemPreviewPos;
 
-    [Header("Shop Items")]
-    public Transform shopButtonsPool;
-    public List<Button> shopButtons;
+    [Header("Purchase Display")]
+    public Transform purchaseButtonsPool;
+    public List<ItemButton> purchaseButtons;
     public List<ItemInfo> availableItems;
 
-    [Header("Item Details")]
+    [Header("Reputation Display")]
+    public Transform repMilestonePool;
+    public List<RepMilestone> repMilestones;
+
+    [Header("Investments Display")]
+    public Transform investmentButtonsPool;
+    public List<ItemButton> investmentButtons;
+
+    [Header("Item Display")]
+    public GameObject itemDisplayView;
+    public GameObject itemDetailsDisplay;
+    public GameObject itemUpgradesDisplay;
     public ItemInfo displayedItemInfo;
     public Text itemName;
-    public Text dimensions;
     public List<Button> rotationViews;
     public Image itemImage;
     public Text itemBudgetCost;
@@ -39,17 +57,31 @@ public class ShopManager : MonoBehaviour
     public List<GameObject> attributesList;
 
     [Header("Item Preview")]
+    public Sprite defaultWallpaper;
+    public Sprite defaultFlooring;
+    public SpriteRenderer wallpaperPreview;
+    public SpriteRenderer flooringPreview;
     public GameObject currentItemPreview;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < shopButtonsPool.childCount; i++)
+        for (int i = 0; i < purchaseButtonsPool.childCount; i++)
         {
-            shopButtons.Add(shopButtonsPool.GetChild(i).GetComponent<Button>());
+            purchaseButtons.Add(purchaseButtonsPool.GetChild(i).GetComponent<ItemButton>());
         }
-        SelectShop(0, true);
-        
+        for (int i = 0; i < repMilestonePool.childCount; i++)
+        {
+            repMilestones.Add(repMilestonePool.GetChild(i).GetComponent<RepMilestone>());
+        }
+        for (int i = 0; i < investmentButtonsPool.childCount; i++)
+        {
+            investmentButtons.Add(investmentButtonsPool.GetChild(i).GetComponent<ItemButton>());
+        }
+
+        SelectShop(0, 0);
+        DisplayPurchases();
+
         //UpdateAvailableItems();
         //displayedItemInfo = availableItems[0];
     }
@@ -74,22 +106,22 @@ public class ShopManager : MonoBehaviour
             currentShop -= 1;
             if (currentShop < 0)
             {
-                currentShop = shopLocations.Length - 1;
+                currentShop = shopTypes.Length - 1;
             }
-            SelectShop(currentShop, false);
+            SelectShop(currentShop, -1);
         }
         else if (type == "right")
         {
             currentShop += 1;
-            if (currentShop > shopLocations.Length - 1)
+            if (currentShop > shopTypes.Length - 1)
             {
                 currentShop = 0;
             }
-            SelectShop(currentShop, true);
+            SelectShop(currentShop, 1);
         }
     }
 
-    public IEnumerator SwitchShopCamera(Transform focusTarget, bool right = true)
+    public IEnumerator SwitchShopCamera(Transform focusTarget, int direction)
     {
         formerShopCameraView.color = new Color(1,1,1,1);
         currentShopCameraView.color = new Color(1, 1, 1, 0);
@@ -99,8 +131,9 @@ public class ShopManager : MonoBehaviour
 
         int i = 0;
 
-        if (right)
+        if (direction == 1)
         {
+            Debug.Log("right");
             while (i <= 25)
             {
                 formerShopCameraView.color = new Color(1, 1, 1, 1 - i / 25f);
@@ -111,8 +144,9 @@ public class ShopManager : MonoBehaviour
                 yield return new WaitForSeconds(0.005f);
             }
         }
-        else
+        else if (direction == -1)
         {
+            Debug.Log("left");
             while (i <= 25)
             {
                 formerShopCameraView.color = new Color(1, 1, 1, 1 - i / 25f);
@@ -123,15 +157,11 @@ public class ShopManager : MonoBehaviour
                 yield return new WaitForSeconds(0.005f);
             }
         }
-        while (i <= 25)
+        else if (direction == 0)
         {
-            formerShopCameraView.color = new Color(1, 1, 1, 1 - i/25f);
-            currentShopCameraView.color = new Color(1, 1, 1, i / 25f);
-            formerShopCameraView.GetComponent<RectTransform>().anchoredPosition = new Vector3(-i * 2,0,0);
-            currentShopCameraView.GetComponent<RectTransform>().anchoredPosition = new Vector3(50 - i * 2, 0, 0);
-            i += 1;
-            Debug.Log(i);
-            yield return new WaitForSeconds(0.005f);
+            formerShopCameraView.color = new Color(1, 1, 1, 0);
+            currentShopCameraView.color = new Color(1, 1, 1, 1);
+            currentShopCameraView.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         }
     }
 
@@ -147,37 +177,91 @@ public class ShopManager : MonoBehaviour
         currentShopCamera.transform.position = new Vector3(focusTarget.position.x, focusTarget.position.y, -10);
     }*/
 
-    public void SelectShop(int idx, bool right)
+    public void SelectShop(int idx, int direction)
     {
+        itemDisplayView.SetActive(false);
+
         if (focusingCamera != null)
         {
             StopCoroutine(focusingCamera);
         }
-        focusingCamera = StartCoroutine(SwitchShopCamera(shopLocations[idx], right));
+        focusingCamera = StartCoroutine(SwitchShopCamera(shopLocations[idx], direction));
         shopLogo.sprite = shopLogos[idx];
         shopLogoBg.sprite = shopLogoBgs[idx];
         shopViewBg.sprite = shopViewBgs[idx];
 
-        foreach (Button shopButton in shopButtons)
-        {
-            shopButton.GetComponent<Image>().sprite = shopItemBgs[idx];
-        }
+        //RESET WALLPAPER AND FLOORING
+        wallpaperPreview.sprite = defaultWallpaper;
+        flooringPreview.sprite = defaultFlooring;
 
-        //UPDATE BUTTONS
-        foreach (Button shopItemButton in shopButtons)
+        //SET UP DISPLAYS
+        SetupPurchasesDisplay();
+        SetupReputationDisplay();
+        SetupInvestmentsDisplay();
+
+        if (currentItemPreview != null)
         {
-            shopItemButton.gameObject.SetActive(false);
+            Destroy(currentItemPreview);
         }
+    }
+
+    public void SetupPurchasesDisplay()
+    {
+        List<ItemInfo> shopItems = new List<ItemInfo>();
 
         for (int i = 0; i < availableItems.Count; i++)
         {
-            shopButtons[i].gameObject.SetActive(true);
-            shopButtons[i].GetComponent<ItemButton>().itemInfo = availableItems[i];
-            shopButtons[i].transform.GetChild(0).GetComponent<Image>().sprite = availableItems[i].itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+            if (availableItems[i].itemType == shopTypes[currentShop])
+            {
+                shopItems.Add(availableItems[i]);
+            }
+        }
+
+        foreach (ItemButton purchaseButton in purchaseButtons)
+        {
+            purchaseButton.GetComponent<Image>().sprite = shopItemBgs[currentShop];
+            purchaseButton.gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < shopItems.Count; i++)
+        {
+            purchaseButtons[i].gameObject.SetActive(true);
+            purchaseButtons[i].GetComponent<Button>().onClick.RemoveAllListeners();
+            purchaseButtons[i].SetDetails(shopItems[i]);
 
             int x = new int();
             x = i;
-            shopButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ViewItem(availableItems[x]); });
+            purchaseButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ViewPurchasableItem(shopItems[x]); });
+        }
+    }
+
+    public void SetupInvestmentsDisplay()
+    {
+        List<ItemInfo> upgradableItems = new List<ItemInfo>();
+
+        for (int i = 0; i < GameManager.current.unlockedItems.Count; i++)
+        {
+            if (GameManager.current.unlockedItems[i].itemType == shopTypes[currentShop])
+            {
+                upgradableItems.Add(GameManager.current.unlockedItems[i]);
+            }
+        }
+
+        foreach (ItemButton investmentButton in investmentButtons)
+        {
+            investmentButton.GetComponent<Image>().sprite = shopItemBgs[currentShop];
+            investmentButton.gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < upgradableItems.Count; i++)
+        {
+            investmentButtons[i].gameObject.SetActive(true);
+            investmentButtons[i].GetComponent<Button>().onClick.RemoveAllListeners();
+            investmentButtons[i].SetDetails(upgradableItems[i]);
+
+            int x = new int();
+            x = i;
+            investmentButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ViewUpgradeableItem(upgradableItems[x]); });
         }
     }
 
@@ -208,13 +292,25 @@ public class ShopManager : MonoBehaviour
         return idx;
     }
 
-    public void ViewItem(ItemInfo itemInfo)
+    public void ViewPurchasableItem(ItemInfo itemInfo)
     {
+        itemDisplayView.SetActive(true);
+        itemDetailsDisplay.SetActive(true);
+        itemUpgradesDisplay.SetActive(false);
+
         displayedItemInfo = itemInfo;
 
         itemName.text = itemInfo.name;
-        itemImage.sprite = itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+        if (itemInfo.customType == CustomizationType.Item)
+        {
+            itemImage.sprite = itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+        }
+        else if (itemInfo.customType == CustomizationType.Sprite)
+        {
+            itemImage.sprite = itemInfo.itemSprite;
+        }
         itemBudgetCost.text = itemInfo.cost.ToString();
+        itemUnlockCost.text = itemInfo.cost.ToString();
 
         //CLEAR ALL ROTATION TOGGLES
         foreach (Button button in rotationViews)
@@ -244,9 +340,9 @@ public class ShopManager : MonoBehaviour
         {
             attributes.Add(themeType.ToString());
         }
-        foreach (ItemType itemType in itemInfo.itemTypes)
+        foreach (CategoryType categoryType in itemInfo.categoryTypes)
         {
-            attributes.Add(itemType.ToString());
+            attributes.Add(categoryType.ToString());
         }
 
         //ADD ATTRIBUTES
@@ -256,14 +352,64 @@ public class ShopManager : MonoBehaviour
             attributesList[i].GetComponentInChildren<Text>().text = attributes[i];
         }
 
-        if (currentItemPreview != null)
+        //SPAWN ITEM PREVIEW
+        if (itemInfo.customType == CustomizationType.Item)
         {
-            Destroy(currentItemPreview);
+            if (currentItemPreview != null)
+            {
+                Destroy(currentItemPreview);
+            }
+            GameObject spawnedItem = Instantiate(itemInfo.itemPrefab[0]) as GameObject;
+            currentItemPreview = spawnedItem;
+            spawnedItem.transform.parent = shopLocations[currentShop];
+            spawnedItem.transform.position = shopItemPreviewPos[currentShop].position;
         }
-        GameObject spawnedItem = Instantiate(itemInfo.itemPrefab[0]) as GameObject;
-        spawnedItem.transform.parent = shopLocations[currentShop];
-        spawnedItem.transform.localPosition = new Vector3(4, 0, 0);
-        currentItemPreview = spawnedItem;
+        else if (itemInfo.customType == CustomizationType.Sprite)
+        {
+            if (itemInfo.itemType == ItemType.Wallpaper)
+            {
+                wallpaperPreview.sprite = itemInfo.itemSprite;
+            }
+            else if (itemInfo.itemType == ItemType.Flooring)
+            {
+                flooringPreview.sprite = itemInfo.itemSprite;
+            }
+        }
+    }
+
+    public void ViewUpgradeableItem(ItemInfo itemInfo)
+    {
+        itemDisplayView.SetActive(true);
+        itemDetailsDisplay.SetActive(false);
+        itemUpgradesDisplay.SetActive(true);
+
+        displayedItemInfo = itemInfo;
+
+        itemName.text = itemInfo.name;
+
+        //SPAWN ITEM PREVIEW
+        if (itemInfo.customType == CustomizationType.Item)
+        {
+            if (currentItemPreview != null)
+            {
+                Destroy(currentItemPreview);
+            }
+            GameObject spawnedItem = Instantiate(itemInfo.itemPrefab[0]) as GameObject;
+            currentItemPreview = spawnedItem;
+            spawnedItem.transform.parent = shopLocations[currentShop];
+            spawnedItem.transform.position = shopItemPreviewPos[currentShop].position;
+        }
+        else if (itemInfo.customType == CustomizationType.Sprite)
+        {
+            if (itemInfo.itemType == ItemType.Wallpaper)
+            {
+                wallpaperPreview.sprite = itemInfo.itemSprite;
+            }
+            else if (itemInfo.itemType == ItemType.Flooring)
+            {
+                flooringPreview.sprite = itemInfo.itemSprite;
+            }
+        }
     }
 
     public void RotateItemDisplay(int view)
@@ -282,9 +428,106 @@ public class ShopManager : MonoBehaviour
         {
             Destroy(currentItemPreview);
         }
-        GameObject spawnedItem = Instantiate(displayedItemInfo.itemPrefab[view]) as GameObject;
+        GameObject spawnedItem = Instantiate(displayedItemInfo.itemPrefab[view]);
         spawnedItem.transform.parent = shopLocations[currentShop];
-        spawnedItem.transform.localPosition = new Vector3(0, 0, 0);
+        spawnedItem.transform.position = shopItemPreviewPos[currentShop].position;
         currentItemPreview = spawnedItem;
+    }
+
+    public void BuyItem()
+    {
+        if (GameManager.current.playerMoney >= displayedItemInfo.cost)
+        {
+            GameManager.current.ChangePlayerMoney(-displayedItemInfo.cost);
+            GameManager.current.unlockedItems.Add(displayedItemInfo);
+
+            //DISABLE SHOP BUTTON
+            foreach (ItemButton purchaseButton in purchaseButtons)
+            {
+                if (purchaseButton.itemInfo == displayedItemInfo)
+                {
+                    purchaseButton.DisableButton("Sold!");
+                }
+            }
+
+            if (availableItems.Contains(displayedItemInfo))
+            {
+                availableItems.Remove(displayedItemInfo);
+            }
+        }
+        else
+        {
+            Debug.Log("not enough money");
+        }
+    }
+
+    public void DisplayPurchases()
+    {
+        reputationDisplay.SetActive(false);
+        investmentsDisplay.SetActive(false);
+        purchasesDisplay.SetActive(true);
+        shopCategoryButtons[0].image.color = Color.white;
+        shopCategoryButtons[1].image.color = Color.gray;
+        shopCategoryButtons[2].image.color = Color.gray;
+        SetupPurchasesDisplay();
+    }
+
+    public void DisplayReputation()
+    {
+        purchasesDisplay.SetActive(false);
+        investmentsDisplay.SetActive(false);
+        reputationDisplay.SetActive(true);
+        shopCategoryButtons[0].image.color = Color.gray;
+        shopCategoryButtons[1].image.color = Color.white;
+        shopCategoryButtons[2].image.color = Color.gray;
+        SetupReputationDisplay();
+
+        itemDisplayView.SetActive(false);
+    }
+
+    public void DisplayInvestments()
+    {
+        purchasesDisplay.SetActive(false);
+        reputationDisplay.SetActive(false);
+        investmentsDisplay.SetActive(true);
+        shopCategoryButtons[0].image.color = Color.gray;
+        shopCategoryButtons[1].image.color = Color.gray;
+        shopCategoryButtons[2].image.color = Color.white;
+        SetupInvestmentsDisplay();
+    }
+
+    public void SetupReputationDisplay()
+    {
+        for (int i = 0; i < repMilestones.Count; i++)
+        {
+            repMilestones[i].repNumBg.sprite = shopLogoBgs[currentShop];
+            repMilestones[i].repMilestoneBg.sprite = shopViewBgs[currentShop];
+            repMilestones[i].repNum.text = (i + 1).ToString();
+
+            if (i + 1 < GameManager.current.npcReps[currentShop] / 100)
+            {
+                repMilestones[i].repFillAmount.fillAmount = 0;
+                repMilestones[i].repNumBg.color = new Color(1,1,1,1f);
+                repMilestones[i].repNum.color = Color.yellow;
+                repMilestones[i].repMilestoneBg.color = new Color(1,1,1,1f);
+                repMilestones[i].repUnlockText.color = Color.white;
+            }
+            else if (i + 1 == GameManager.current.npcReps[currentShop] / 100)
+            {
+                repMilestones[i].repFillAmount.fillAmount = 1 - GameManager.current.npcReps[currentShop] % 100 / 100f;
+                repMilestones[i].repNumBg.color = new Color(0.75f, 0.75f, 0.75f, 1);
+                repMilestones[i].repNum.color = Color.white;
+                repMilestones[i].repMilestoneBg.color = new Color(1, 1, 1, 1f);
+                repMilestones[i].repUnlockText.color = Color.white;
+            }
+            else if (i + 1 > GameManager.current.npcReps[currentShop] / 100)
+            {
+                repMilestones[i].repFillAmount.fillAmount = 1;
+                repMilestones[i].repNumBg.color = new Color(0.5f, 0.5f, 0.5f, 1);
+                repMilestones[i].repNum.color = Color.white;
+                repMilestones[i].repMilestoneBg.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+                repMilestones[i].repUnlockText.color = Color.gray;
+            }
+        }
     }
 }

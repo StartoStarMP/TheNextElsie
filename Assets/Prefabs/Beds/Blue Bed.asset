@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Blue Bed
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 1812a05c7a1bc3143b7be9c3bda88292, type: 3}
-  subCategories:
-  - Beds
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 05000000
-  itemTypes: 04000000
+  themes: 
+  categoryTypes: 04000000

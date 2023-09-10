@@ -8,11 +8,10 @@ using System.ComponentModel.DataAnnotations;
 public class ItemInfo : ScriptableObject
 {
     public CustomizationType customType;
+    public ItemType itemType;
 
     [ShowIf("customType", CustomizationType.Item)]
     public GameObject[] itemPrefab;
-    [ShowIf("customType", CustomizationType.Item)]
-    public List<string> subCategories;
     [ShowIf("customType", CustomizationType.Item)]
     public string targetLayer;
     [ShowIf("customType", CustomizationType.Sprite)]
@@ -20,7 +19,12 @@ public class ItemInfo : ScriptableObject
     public int cost;
     public ColorType[] colors;
     public ThemeType[] themes;
-    public ItemType[] itemTypes;
+    public CategoryType[] categoryTypes;
+}
+
+public enum ItemType
+{
+    WallObject, FloorObject, RugObject, Wallpaper, Flooring
 }
 
 public enum CustomizationType
@@ -60,7 +64,7 @@ public enum ThemeType
     Floral
 }
 
-public enum ItemType 
+public enum CategoryType 
 {
     None,
     Chair, 

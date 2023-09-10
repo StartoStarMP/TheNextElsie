@@ -18,10 +18,7 @@ public class PlayerMoneyCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            AddMoney(70);
-        }
+
     }
 
     public void SetPlayerMoney()
@@ -29,25 +26,35 @@ public class PlayerMoneyCounter : MonoBehaviour
         playerMoney.text = GameManager.current.playerMoney.ToString();
     }
 
-    public void AddMoney(int moneyToAdd)
+    public void ChangeMoney(int moneyToAdd)
     {
-        moneyAddedText.text = "+ " + moneyToAdd.ToString();
+        moneyAddedText.text = moneyToAdd.ToString();
         moneyAddedAnim.SetTrigger("add");
-        StartCoroutine(AdjustXPSlider(moneyToAdd));
+        StartCoroutine(AdjustMoney(moneyToAdd));
     }
 
-    public IEnumerator AdjustXPSlider(int moneyToAdd)
+    public IEnumerator AdjustMoney(int moneyToAdd)
     {
-        int currentMoney = GameManager.current.playerMoney;
-        int finalMoney = GameManager.current.playerMoney + moneyToAdd;
+        int currentMoney = GameManager.current.playerMoney - moneyToAdd;
+        int finalMoney = GameManager.current.playerMoney;
 
-        while (currentMoney < finalMoney)
+        if (currentMoney > finalMoney)
         {
-            currentMoney += 1;
-            playerMoney.text = currentMoney.ToString();
-            yield return new WaitForSeconds(0.02f);
+            while (currentMoney > finalMoney)
+            {
+                currentMoney -= 1;
+                playerMoney.text = currentMoney.ToString();
+                yield return new WaitForSeconds(0.02f);
+            }
         }
-
-        GameManager.current.playerMoney = finalMoney;
+        else
+        {
+            while (currentMoney < finalMoney)
+            {
+                currentMoney += 1;
+                playerMoney.text = currentMoney.ToString();
+                yield return new WaitForSeconds(0.02f);
+            }
+        }
     }
 }

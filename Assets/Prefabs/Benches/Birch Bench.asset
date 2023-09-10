@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Birch Bench
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: e9620aa88cb914147b4ef5544fce22ec, type: 3}
   - {fileID: 5771104396716151637, guid: 9b057231990d4d14dad782341b757f54, type: 3}
   - {fileID: 5771104396716151637, guid: be850366a942ab54e9c2f48ced3a1221, type: 3}
   - {fileID: 5771104396716151637, guid: 2f83585f84ac87c4384e2c4b2417ca9a, type: 3}
-  subCategories:
-  - Benches
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 07000000
-  itemTypes: 05000000
+  themes: 
+  categoryTypes: 05000000

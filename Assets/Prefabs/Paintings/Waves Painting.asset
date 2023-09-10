@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Waves Painting
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 0
   itemPrefab:
   - {fileID: 5771104396716151637, guid: cbc661aa4006fe44f99cd4d4e001d8ab, type: 3}
-  subCategories:
-  - Paintings
   targetLayer: WallObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 0700000008000000
-  itemTypes: 0900000010000000
+  themes: 
+  categoryTypes: 09000000

@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Walnut Bench
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 1384e58cfedd9da4ab5f150c21e72fe1, type: 3}
   - {fileID: 5771104396716151637, guid: 0eeefca5acc41434a85024baeb1079b0, type: 3}
   - {fileID: 5771104396716151637, guid: 7b06b2477f82d8949aabfdef3558ec06, type: 3}
   - {fileID: 5771104396716151637, guid: 31d4929d28268ab45876854029a33cf6, type: 3}
-  subCategories:
-  - Benches
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 0a000000
-  itemTypes: 05000000
+  themes: 
+  categoryTypes: 05000000

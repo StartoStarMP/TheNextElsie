@@ -120,11 +120,14 @@ public class MissionManager : MonoBehaviour
             }
             else if (newRequirement.reqType == RequirementType.Item)
             {
-                newRequirement.item = GameManager.current.wallObjects[Random.Range(0, GameManager.current.wallObjects.Length)];
+                List<ItemInfo> availableItems = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.WallObject, ItemType.FloorObject, ItemType.RugObject });
+                newRequirement.item = availableItems[Random.Range(0, availableItems.Count)];
+                newRequirement.itemCount = Random.Range(1,3);
             }
-            else if (newRequirement.reqType == RequirementType.ItemType)
+            else if (newRequirement.reqType == RequirementType.CategoryType)
             {
-                newRequirement.itemType = (ItemType)Random.Range(0, (int)System.Enum.GetValues(typeof(ItemType)).Cast<ItemType>().Max());
+                newRequirement.categoryType = (CategoryType)Random.Range(0, (int)System.Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().Max());
+                newRequirement.categoryTypeCount = Random.Range(1, 3);
             }
             else if (newRequirement.reqType == RequirementType.RoomType)
             {

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Birch Coffee Table
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 533f8ddd1bcc87845910047a3ddab02c, type: 3}
-  subCategories:
-  - Coffee Tables
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 07000000
-  itemTypes: 0200000006000000
+  themes: 
+  categoryTypes: 06000000

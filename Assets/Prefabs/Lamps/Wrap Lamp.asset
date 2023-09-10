@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Wrap Lamp
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 19cfba2f6f6f5064780d22cf9a70e7c0, type: 3}
-  subCategories:
-  - Lamps
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 0a000000
-  itemTypes: 0800000011000000
+  themes: 
+  categoryTypes: 08000000

@@ -16,11 +16,12 @@ public class GameManager : MonoBehaviour
     public bool inEditMode = false;
 
     [Header("Items")]
-    public ItemInfo[] wallObjects;
-    public ItemInfo[] floorObjects;
-    public ItemInfo[] rugObjects;
-    public ItemInfo[] wallpapers;
-    public ItemInfo[] floorTiles;
+    //public ItemInfo[] wallObjects;
+    //public ItemInfo[] floorObjects;
+    //public ItemInfo[] rugObjects;
+    //public ItemInfo[] wallpapers;
+    //public ItemInfo[] floorTiles;
+    public List<ItemInfo> unlockedItems;
 
     private void Awake()
     {
@@ -39,6 +40,21 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public List<ItemInfo> GetAvailableItems(List<ItemType> itemTypes)
+    {
+        List<ItemInfo> availableItems = new List<ItemInfo>();
+
+        foreach (ItemInfo item in unlockedItems)
+        {
+            if (itemTypes.Contains(item.itemType))
+            {
+                availableItems.Add(item);
+            }
+        }
+
+        return availableItems;
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void RuntimeInit()
     {
@@ -46,6 +62,16 @@ public class GameManager : MonoBehaviour
             return;
 
         Instantiate(Resources.Load("GameManager"));
+    }
+
+    public void ChangePlayerMoney(int moneyChange)
+    {
+        playerMoney = playerMoney + moneyChange;
+        
+        if (FindObjectOfType<PlayerMoneyCounter>() != null)
+        {
+            FindObjectOfType<PlayerMoneyCounter>().ChangeMoney(moneyChange);
+        }
     }
 }
 

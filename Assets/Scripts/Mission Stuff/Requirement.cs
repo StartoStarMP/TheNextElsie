@@ -33,12 +33,12 @@ public class Requirement
     [ShowIf("reqType", RequirementType.Theme)]
     public ThemeType theme;
     [ShowIf("reqType", RequirementType.Theme)]
-    public int themeRatio;
+    public float themeRatio;
 
-    [ShowIf("reqType", RequirementType.ItemType)]
-    public ItemType itemType;
-    [ShowIf("reqType", RequirementType.ItemType)]
-    public int itemTypeCount;
+    [ShowIf("reqType", RequirementType.CategoryType)]
+    public CategoryType categoryType;
+    [ShowIf("reqType", RequirementType.CategoryType)]
+    public int categoryTypeCount;
 
     [ShowIf("reqType", RequirementType.Unique)]
     public UniqueConditionType uniqueCondition;
@@ -47,7 +47,7 @@ public class Requirement
 [System.Serializable]
 public enum RequirementType
 {
-    RoomType, Item, Color, Theme, ItemType, Unique
+    RoomType, Item, Color, Theme, CategoryType, Unique
 }
 
 [System.Serializable]

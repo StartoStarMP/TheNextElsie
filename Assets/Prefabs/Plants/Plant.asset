@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Plant
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 83db9022020f448489068c78d65397cc, type: 3}
-  subCategories:
-  - Plants
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 04000000
-  itemTypes: 0a000000
+  themes: 
+  categoryTypes: 0a000000

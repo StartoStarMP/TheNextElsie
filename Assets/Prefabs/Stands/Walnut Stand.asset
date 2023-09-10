@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4b8898a171d1744a72f8bce66a17b4, type: 3}
   m_Name: Walnut Stand
   m_EditorClassIdentifier: 
+  customType: 0
+  itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 859193657d5f6e141aa346438b46736e, type: 3}
   - {fileID: 5771104396716151637, guid: dbd28ed4883a2bf4ba3a383ed532e05e, type: 3}
-  subCategories:
-  - Stands
   targetLayer: FloorObjects
+  itemSprite: {fileID: 0}
   cost: 45
   colors: 0a000000
-  itemTypes: 0f000000
+  themes: 
+  categoryTypes: 0f000000
