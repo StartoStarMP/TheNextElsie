@@ -103,8 +103,8 @@ public class MissionManager : MonoBehaviour
         newMission.wallSprite = wallOptions[Random.Range(0, wallOptions.Length)];
         newMission.floorSprite = floorOptions[Random.Range(0, floorOptions.Length)];
 
-        newMission.gridWidth = Random.Range(3, 10);
-        newMission.gridHeight = Random.Range(4, 10);
+        newMission.gridWidth = Random.Range(8, 15);
+        newMission.gridHeight = Random.Range(10, 20);
 
         //GENERATE AFFIXES
         int numAffixes = Random.Range(0,4);
@@ -145,9 +145,17 @@ public class MissionManager : MonoBehaviour
             newMission.affixes.Add(newRequirement);
         }
 
-        //GENERATE REWARDS
+        //GENERATE MONEY REWARD
         newMission.missionMoney = 50 * Random.Range(2, 10);
 
+        //GENERATE BLUEPRINT REWARD
+        float chance = Random.Range(0,1f);
+        if (chance <= 0.33)
+        {
+            int randItem = Random.Range(0, GameManager.current.lockedItems.Count);
+            newMission.itemBlueprint = GameManager.current.lockedItems[randItem];
+            GameManager.current.lockedItems.RemoveAt(randItem);
+        }
         return newMission;
     }
 

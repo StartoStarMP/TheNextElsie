@@ -12,6 +12,7 @@ public class ItemInfo : ScriptableObject
 
     [ShowIf("customType", CustomizationType.Item)]
     public GameObject[] itemPrefab;
+    public List<ItemStyle> itemStyles;
     [ShowIf("customType", CustomizationType.Item)]
     public string targetLayer;
     [ShowIf("customType", CustomizationType.Sprite)]
@@ -20,6 +21,26 @@ public class ItemInfo : ScriptableObject
     public ColorType[] colors;
     public ThemeType[] themes;
     public CategoryType[] categoryTypes;
+
+    public Sprite GetItemSpriteToDisplay()
+    {
+        if (customType == CustomizationType.Item)
+        {
+            return itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
+        }
+        else if (customType == CustomizationType.Sprite)
+        {
+            return itemSprite;
+        }
+
+        return null;
+    }
+}
+
+[System.Serializable]
+public class ItemStyle
+{
+    public List<Sprite> sprites;
 }
 
 public enum ItemType

@@ -27,16 +27,19 @@ public class PlacementTool : MonoBehaviour
         {
             if (CheckIfSurfaceAvailable())
             {
-                GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 0.5f);
+                GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 0.75f);
+                HighlightPlacementTool(Color.green);
             }
             else
             {
-                GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 0.5f);
+                GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 0.75f);
+                HighlightPlacementTool(Color.red);
             }
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 0.5f);
+            GetComponent<SpriteRenderer>().color = new Color(0, 1, 0, 0.75f);
+            HighlightPlacementTool(Color.green);
         }
 
         GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(transform.position.y * -10);
@@ -51,6 +54,7 @@ public class PlacementTool : MonoBehaviour
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, 0.5f), transform.rotation) as GameObject;
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10);
+                newItem.GetComponent<Item>().rotation = selectedRotation;
             }
             else if (CheckIfSurfaceAvailable())
             {
@@ -58,11 +62,13 @@ public class PlacementTool : MonoBehaviour
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10) + 50;
                 possibleSurfaces[0].itemsOnSurface.Add(newItem.GetComponent<Item>());
                 newItem.GetComponent<Item>().surface = possibleSurfaces[0];
+                newItem.GetComponent<Item>().rotation = selectedRotation;
             }
             else
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, 0), transform.rotation) as GameObject;
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10);
+                newItem.GetComponent<Item>().rotation = selectedRotation;
             }
 
             //MissionUIManager.current.IncreaseCriteriaProgress(selectedItem);
@@ -166,8 +172,13 @@ public class PlacementTool : MonoBehaviour
                 return false;
             }
         }
-
         return true;
+    }
+
+    public void HighlightPlacementTool(Color outlineColor)
+    {
+        GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
+        GetComponent<Renderer>().material.SetColor("_Color", outlineColor);
     }
 
     /*public void OnCollisionEnter2D(Collision2D collision)

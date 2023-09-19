@@ -5,8 +5,18 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ItemInfo itemInfo;
+    public int rotation = 0;
+    public int style = 0;
     public Item surface;
     public List<Item> itemsOnSurface = new List<Item>();
+    public float itemPickupProgress = 0;
+    public bool selected = false;
+
+    private void Start()
+    {
+        GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
+        GetComponent<Renderer>().material.SetColor("_Color", Color.clear);
+    }
 
     public virtual void OnMouseDown()
     {
@@ -14,7 +24,20 @@ public class Item : MonoBehaviour
 
         if (!UIHoverListener.current.isUIOverride)
         {
+            StartFilling();
             DesignManager.current.SelectItem(this);
+            Highlight(Color.white);
+            selected = true;
+        }
+    }
+
+    public virtual void OnMouseUp()
+    {
+        if (!GameManager.current.inEditMode) { return; }
+
+        if (!UIHoverListener.current.isUIOverride)
+        {
+            StopFilling();
         }
     }
 
@@ -25,7 +48,11 @@ public class Item : MonoBehaviour
         Debug.Log("entered" + gameObject.name);
         if (!DesignManager.current.placementTool.gameObject.activeInHierarchy)
         {
-            DesignManager.current.ShowItemContext(itemInfo);
+            //DesignManager.current.ShowItemContext(itemInfo);
+            if (!selected)
+            {
+                Highlight(Color.yellow);
+            }
         }
     }
 
@@ -36,8 +63,71 @@ public class Item : MonoBehaviour
         Debug.Log("exit" + gameObject.name);
         if (!DesignManager.current.placementTool.gameObject.activeInHierarchy)
         {
-            DesignManager.current.HideItemContext();
+            //DesignManager.current.HideItemContext();
+            if (!selected)
+            {
+                Highlight(Color.clear);
+            }
         }
+
+        if (itemPickupProgress > 0)
+        {
+            StopFilling();
+        }
+    }
+
+    public void SelectStyle(int newStyle)
+    {
+        style = newStyle;
+        GetComponent<SpriteRenderer>().sprite = itemInfo.itemStyles[newStyle].sprites[rotation];
+        if (rotation == 1)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
+
+    public void StartFilling()
+    {
+        StopAllCoroutines();
+        StartCoroutine(_Fill());
+    }
+
+    public void StopFilling()
+    {
+        StopAllCoroutines();
+        StartCoroutine(_Unfill());
+    }
+
+    public IEnumerator _Fill()
+    {
+        Debug.Log("ya");
+        while (itemPickupProgress < 1)
+        {
+            itemPickupProgress += 0.015f;
+            yield return new WaitForSeconds(0.01f);
+        }
+        DesignManager.current.PickUpItem(this);
+    }
+
+    public IEnumerator _Unfill()
+    {
+        Debug.Log("no");
+        while (itemPickupProgress > 0)
+        {
+            itemPickupProgress -= 0.05f;
+            yield return new WaitForSeconds(0.01f);
+        }
+    }
+
+    public void Highlight(Color outlineColor)
+    {
+        Debug.Log("ran");
+        GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
+        GetComponent<Renderer>().material.SetColor("_Color", outlineColor);
     }
 
     /*public IEnumerator Highlight()

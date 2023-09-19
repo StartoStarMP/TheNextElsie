@@ -40,6 +40,8 @@ public class EvaluationManager : MonoBehaviour
     public PlayerLevelSlider playerLevelSlider;
     public GameObject playerRewards;
     public PlayerMoneyCounter moneyCount;
+    public Image unlockedItemIcon;
+    public Text unlockedItemText;
     public int[] numItemsPerCategory = new int[3];
     public GameObject repSliders;
     public Button endMissionButton;
@@ -200,12 +202,25 @@ public class EvaluationManager : MonoBehaviour
             StartCoroutine(UIElementFlyInOut(scoreBreakdown.gameObject, false));
             yield return UIElementFlyInOut(playerLevelSlider.gameObject, true);
 
-            playerLevelSlider.AddXP(50 + 100 * rankLevel);
+            GameManager.current.AddPlayerXP(50 + 100 * rankLevel);
             forwardRecapButton.interactable = true;
         }
         //SHOW REWARDS
         else if (recapPhase == 3)
         {
+            if (GameManager.current.currentMission.itemBlueprint != null)
+            {
+                unlockedItemIcon.gameObject.SetActive(true);
+                unlockedItemIcon.sprite = GameManager.current.currentMission.itemBlueprint.GetItemSpriteToDisplay();
+                unlockedItemText.text = GameManager.current.currentMission.itemBlueprint.name;
+                GameManager.current.unlockedItems.Add(GameManager.current.currentMission.itemBlueprint);
+            }
+            else
+            {
+                unlockedItemIcon.gameObject.SetActive(false);
+                unlockedItemText.text = "";
+            }
+
             StartCoroutine(UIElementFlyInOut(playerLevelSlider.gameObject, false));
             yield return UIElementFlyInOut(playerRewards, true);
 

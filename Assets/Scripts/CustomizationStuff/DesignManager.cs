@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class DesignManager : MonoBehaviour
 {
@@ -52,10 +53,14 @@ public class DesignManager : MonoBehaviour
     public Text placementText;
 
     [Header("Item Selection")]
+    public Item selectedItem;
     public GameObject itemContextPopup;
     public Image itemContextImage;
     public Text itemContextName;
     public Text itemContextCost;
+    public Button[] styleButtons;
+    public Image[] styleButtonImages;
+    public GameObject[] styleLockOverlays;
 
     [Header("Color Wheel")]
     public Image[] wheelSlices;
@@ -103,10 +108,29 @@ public class DesignManager : MonoBehaviour
         currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.FloorObject });
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
-            ItemInfo floorItem = currentItemsToSet[i];
-            floorButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i]);
-            floorButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(floorItem); });
-            floorButtons[i].gameObject.SetActive(true);
+            int x;
+            x = i;
+            ItemInfo floorItem = currentItemsToSet[x];
+            floorButtons[x].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[x]);
+            floorButtons[x].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(floorItem); });
+
+            /*EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerClick;
+            entry.callback.AddListener((data) => { StartPlacementTool(floorItem); });
+            floorButtons[x].GetComponent<EventTrigger>().triggers.Add(entry);
+
+            EventTrigger.Entry entry2 = new EventTrigger.Entry();
+            entry2.eventID = EventTriggerType.PointerDown;
+            entry2.callback.AddListener((data) => { floorButtons[x].GetComponent<ItemButton>().ToggleStyles(true); });
+            floorButtons[x].GetComponent<EventTrigger>().triggers.Add(entry2);
+
+            EventTrigger.Entry entry3 = new EventTrigger.Entry();
+            entry3.eventID = EventTriggerType.PointerUp;
+            entry3.callback.AddListener((data) => { floorButtons[x].GetComponent<ItemButton>().ToggleStyles(false); });
+            floorButtons[x].GetComponent<EventTrigger>().triggers.Add(entry3);
+            */
+
+            floorButtons[x].gameObject.SetActive(true);
         }
 
         //SETTING RUG ITEMS
@@ -171,6 +195,15 @@ public class DesignManager : MonoBehaviour
                 placementTool.gameObject.SetActive(false);
                 placementText.gameObject.SetActive(false);
             }
+
+            if (selectedItem != null)
+            {
+                DeselectItem();
+                if (itemContextPopup.activeInHierarchy)
+                {
+                    itemContextPopup.SetActive(false);
+                }
+            }
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -181,10 +214,10 @@ public class DesignManager : MonoBehaviour
             ScrollCategory("right");
         }
 
-        if (itemContextPopup.activeInHierarchy)
+        /*if (itemContextPopup.activeInHierarchy)
         {
             itemContextPopup.GetComponent<RectTransform>().position = new Vector3(Input.mousePosition.x + 10, Input.mousePosition.y - 10, 0);
-        }
+        }*/
     }
 
     public void Filter(string category = "")
@@ -279,6 +312,21 @@ public class DesignManager : MonoBehaviour
 
     public void SelectItem(Item item)
     {
+        selectedItem = item;
+        selectedItem.Highlight(Color.white);
+        selectedItem.selected = true;
+        ShowItemContext(item);
+    }
+
+    public void DeselectItem()
+    {
+        selectedItem.Highlight(Color.clear);
+        selectedItem.selected = false;
+        selectedItem = null;
+    }
+
+    public void PickUpItem(Item item)
+    {
         if (placementTool.gameObject.activeInHierarchy)
         {
             return;
@@ -299,14 +347,10 @@ public class DesignManager : MonoBehaviour
         if (item.surface != null)
         {
             item.surface.itemsOnSurface.Remove(item);
-            StartPlacementTool(item.itemInfo, true);
-            RemoveItem(item);
         }
-        else
-        {
-            StartPlacementTool(item.itemInfo, true);
-            RemoveItem(item);
-        }
+
+        StartPlacementTool(item.itemInfo, true);
+        RemoveItem(item);
     }
 
     public void RemoveItem(Item item)
@@ -512,12 +556,54 @@ public class DesignManager : MonoBehaviour
         }
     }
 
-    public void ShowItemContext(ItemInfo itemInfo)
+    public void ShowItemContext(Item item)
     {
         itemContextPopup.SetActive(true);
-        itemContextImage.sprite = itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-        itemContextName.text = itemInfo.name;
-        itemContextCost.text = "Costs: " + itemInfo.cost;
+        itemContextImage.sprite = item.itemInfo.itemStyles[item.style].sprites[0];
+        itemContextName.text = item.itemInfo.name;
+        itemContextCost.text = "Costs: " + item.itemInfo.cost;
+
+        for (int i = 0; i < styleButtons.Length; i++)
+        {
+            styleLockOverlays[i].SetActive(true);
+            styleButtons[i].interactable = false;
+            styleButtons[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < item.itemInfo.itemStyles.Count; i++)
+        {
+            styleButtons[i].gameObject.SetActive(true);
+            styleButtonImages[i].sprite = item.itemInfo.itemStyles[i].sprites[0];
+
+            //HIGHLIGHT SELECTED STYLE
+            if (i == item.style) 
+            {
+                styleButtons[i].image.color = Color.yellow;
+            }
+            else
+            {
+                styleButtons[i].image.color = Color.white;
+            }
+
+            if (ItemStatsManager.current.GetUnlockedStyles(item.itemInfo).Contains(i))
+            {
+                styleLockOverlays[i].SetActive(false);
+                styleButtons[i].interactable = true;
+            }
+        }
+    }
+
+    public void SetStyleOfSelectedItem(int styleIdx)
+    {
+        if (selectedItem == null)
+        {
+            Debug.LogError("No selected item, but tried to set style of selected item.");
+        }
+        else
+        {
+            selectedItem.SelectStyle(styleIdx);
+            ShowItemContext(selectedItem);
+        }
     }
 
     public void HideItemContext()

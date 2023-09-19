@@ -22,6 +22,8 @@ public class SceneLoader : MonoBehaviour
     public AffixManager affixesDisplay;
     public Text dimensionsText;
     public Text moneyText;
+    public Image itemBlueprintIcon;
+    public Text itemBlueprintName;
 
     [Header("Location Change")]
     public bool locationChangeActive = false;
@@ -51,11 +53,11 @@ public class SceneLoader : MonoBehaviour
 
     private void OnLevelWasLoaded(int level)
     {
-        if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("MissionSceneNew") && currentLoadingScreenType == LoadingScreenType.StartingMission)
+        if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("Mission") && currentLoadingScreenType == LoadingScreenType.StartingMission)
         {
             StartMission(GameManager.current.currentMission);
         }
-        else if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("PlayerRoom") && currentLoadingScreenType == LoadingScreenType.EndingMission)
+        else if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("Home") && currentLoadingScreenType == LoadingScreenType.EndingMission)
         {
 
         }
@@ -189,6 +191,18 @@ public class SceneLoader : MonoBehaviour
         affixesDisplay.PopulateAffixDisplay();
         FindObjectOfType<RoomConstructor>().CreateRoom(missionInfo.borderSprite, missionInfo.wallSprite, missionInfo.floorSprite, missionInfo.gridWidth, missionInfo.gridHeight);
         moneyText.text = missionInfo.missionMoney.ToString();
+        if (missionInfo.itemBlueprint != null)
+        {
+            itemBlueprintIcon.gameObject.SetActive(true);
+            itemBlueprintIcon.sprite = missionInfo.itemBlueprint.GetItemSpriteToDisplay();
+            itemBlueprintName.text = missionInfo.itemBlueprint.name;
+        }
+        else
+        {
+            itemBlueprintIcon.gameObject.SetActive(false);
+            itemBlueprintIcon.sprite = null;
+            itemBlueprintName.text = "";
+        }
     }
 
     public void OpenMissionPreview(MissionInfo missionInfo)
@@ -210,7 +224,7 @@ public class SceneLoader : MonoBehaviour
         GetComponent<Animator>().SetTrigger("missionPreviewAccept");
 
         StartCoroutine(Timer(x => GameManager.current.currentMission = currentMissionInfo, 1.25f));
-        StartCoroutine(Timer(x => SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission), 1.25f));
+        StartCoroutine(Timer(x => SceneLoader.current.LoadScene("Mission", LoadingScreenType.StartingMission), 1.25f));
     }
 
     public void StartMission(MissionInfo missionInfo)
@@ -232,7 +246,7 @@ public class SceneLoader : MonoBehaviour
             //Sprite sprite = Sprite.Create(currentCapture, new Rect(0, 0, Screen.width, Screen.height - (Screen.height * 200/1080)), new Vector2(0, 0));
             //test.sprite = sprite;
 
-            SceneLoader.current.LoadScene("MissionSceneNew", LoadingScreenType.StartingMission);
+            SceneLoader.current.LoadScene("Mission", LoadingScreenType.StartingMission);
         }
         catch (System.Exception e)
         {

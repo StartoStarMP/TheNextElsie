@@ -47,13 +47,11 @@ public class PlayerLevelSlider : MonoBehaviour
             playerCurrentXP.value += 1;
             if (playerCurrentXP.value == 100)
             {
-                playerLevel.text = ((GameManager.current.playerXP + xpToAdd) / 100).ToString();
+                playerLevel.text = (int.Parse(playerLevel.text) + 1).ToString();
                 playerCurrentXP.value = 0;
                 finalXP -= 100;
             }
             yield return new WaitForSeconds(0.02f);
         }
-
-        GameManager.current.playerXP += xpToAdd;
     }
 }

@@ -11,7 +11,9 @@ public class MissionButton : MonoBehaviour
     public GridDisplay gridDisplay;
     public Text missionName;
     public Text missionAffixes;
-    public Text moneyReward;
+    public Text missionMoney;
+    public Image missionBlueprintIcon;
+    public Text missionBlueprintText;
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +57,19 @@ public class MissionButton : MonoBehaviour
             }
         }
 
-        moneyReward.text = missionInfo.missionMoney.ToString();
+        missionMoney.text = missionInfo.missionMoney.ToString();
+        if (missionInfo.itemBlueprint != null)
+        {
+            missionBlueprintIcon.gameObject.SetActive(true);
+            missionBlueprintIcon.sprite = missionInfo.itemBlueprint.GetItemSpriteToDisplay();
+            missionBlueprintText.text = missionInfo.itemBlueprint.name;
+        }
+        else
+        {
+            missionBlueprintIcon.gameObject.SetActive(false);
+            missionBlueprintIcon.sprite = null;
+            missionBlueprintText.text = "";
+        }
 
         //MissionInfo x;
         //x = newMissionInfo;

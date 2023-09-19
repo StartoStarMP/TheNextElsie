@@ -21,17 +21,7 @@ public class ItemButton : MonoBehaviour
     public void SetDetails(ItemInfo newItemInfo)
     {
         itemInfo = newItemInfo;
-
-        if (itemInfo.customType == CustomizationType.Item)
-        {
-            //itemName.text = itemInfo.name;
-            //itemBudgetCost.text = itemInfo.cost.ToString();
-            itemImage.sprite = itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-        }
-        else if (itemInfo.customType == CustomizationType.Sprite)
-        {
-            itemImage.sprite = itemInfo.itemSprite;
-        }
+        itemImage.sprite = itemInfo.GetItemSpriteToDisplay();
 
         GetComponent<Button>().interactable = true;
         disableOverlay.SetActive(false);

@@ -16,12 +16,8 @@ public class GameManager : MonoBehaviour
     public bool inEditMode = false;
 
     [Header("Items")]
-    //public ItemInfo[] wallObjects;
-    //public ItemInfo[] floorObjects;
-    //public ItemInfo[] rugObjects;
-    //public ItemInfo[] wallpapers;
-    //public ItemInfo[] floorTiles;
     public List<ItemInfo> unlockedItems;
+    public List<ItemInfo> lockedItems;
 
     private void Awake()
     {
@@ -71,6 +67,16 @@ public class GameManager : MonoBehaviour
         if (FindObjectOfType<PlayerMoneyCounter>() != null)
         {
             FindObjectOfType<PlayerMoneyCounter>().ChangeMoney(moneyChange);
+        }
+    }
+
+    public void AddPlayerXP(int xpAdded)
+    {
+        playerXP = playerXP + xpAdded;
+
+        if (FindObjectOfType<PlayerLevelSlider>() != null)
+        {
+            FindObjectOfType<PlayerLevelSlider>().AddXP(xpAdded);
         }
     }
 }

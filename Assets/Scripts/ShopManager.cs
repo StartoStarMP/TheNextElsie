@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ShopManager : MonoBehaviour
 {
@@ -55,6 +56,19 @@ public class ShopManager : MonoBehaviour
     public Text itemBudgetCost;
     public Text itemUnlockCost;
     public List<GameObject> attributesList;
+
+    [Header("Item Upgrades")]
+    //DISCOUNTS
+    public Text itemDiscountedCost;
+    public EventTrigger[] discountLockButtons;
+    //QUALITY
+    public Image itemQuality;
+    public Sprite[] qualitySprites;
+    public EventTrigger[] qualityLockButtons;
+    //STYLES
+    public Text itemStyles;
+    public Image[] styleImages;
+    public EventTrigger[] styleLockButtons;
 
     [Header("Item Preview")]
     public Sprite defaultWallpaper;
@@ -301,14 +315,7 @@ public class ShopManager : MonoBehaviour
         displayedItemInfo = itemInfo;
 
         itemName.text = itemInfo.name;
-        if (itemInfo.customType == CustomizationType.Item)
-        {
-            itemImage.sprite = itemInfo.itemPrefab[0].GetComponent<SpriteRenderer>().sprite;
-        }
-        else if (itemInfo.customType == CustomizationType.Sprite)
-        {
-            itemImage.sprite = itemInfo.itemSprite;
-        }
+        itemImage.sprite = itemInfo.GetItemSpriteToDisplay();
         itemBudgetCost.text = itemInfo.cost.ToString();
         itemUnlockCost.text = itemInfo.cost.ToString();
 
@@ -410,11 +417,16 @@ public class ShopManager : MonoBehaviour
                 flooringPreview.sprite = itemInfo.itemSprite;
             }
         }
+
+        UpdateItemUpgrades();
     }
 
     public void RotateItemDisplay(int view)
     {
-        itemImage.sprite = displayedItemInfo.itemPrefab[view].GetComponent<SpriteRenderer>().sprite;
+        if (displayedItemInfo.customType == CustomizationType.Item)
+        {
+            itemImage.sprite = displayedItemInfo.itemPrefab[view].GetComponent<SpriteRenderer>().sprite;
+        }
         if (view == 3)
         {
             itemImage.GetComponent<RectTransform>().localScale = new Vector3(-1, 1, 1);
@@ -529,5 +541,112 @@ public class ShopManager : MonoBehaviour
                 repMilestones[i].repUnlockText.color = Color.gray;
             }
         }
+    }
+
+    public void UpdateItemUpgrades()
+    {
+        //DISCOUNTS
+        int discountTier = ItemStatsManager.current.GetDiscountTier(displayedItemInfo);
+
+        if (discountTier != 0)
+        {
+            itemDiscountedCost.text = (displayedItemInfo.cost - (displayedItemInfo.cost * Mathf.Pow(2, (discountTier - 1)) * 0.05f)).ToString();
+        }
+        else
+        {
+            itemDiscountedCost.text = displayedItemInfo.cost.ToString();
+        }
+
+        for(int i = 0; i < discountLockButtons.Length; i++)
+        {
+            discountLockButtons[i].triggers.Clear();
+
+            if (i < discountTier)
+            {
+                discountLockButtons[i].gameObject.SetActive(false);
+            }
+            else if (i == discountTier)
+            {
+                discountLockButtons[i].gameObject.SetActive(true);
+
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerClick;
+                entry.callback.AddListener((data) => { UpgradeDiscount(); });
+                discountLockButtons[i].triggers.Add(entry);
+            }
+            else if (i > discountTier)
+            {
+                discountLockButtons[i].gameObject.SetActive(true);
+            }
+        }
+
+        //QUALITY
+        int qualityTier = ItemStatsManager.current.GetQualityTier(displayedItemInfo);
+
+        itemQuality.sprite = qualitySprites[qualityTier];
+
+        for (int i = 0; i < qualityLockButtons.Length; i++)
+        {
+            qualityLockButtons[i].triggers.Clear();
+
+            if (i < qualityTier)
+            {
+                qualityLockButtons[i].gameObject.SetActive(false);
+            }
+            else if (i == qualityTier)
+            {
+                qualityLockButtons[i].gameObject.SetActive(true);
+
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerClick;
+                entry.callback.AddListener((data) => { UpgradeQuality(); });
+                qualityLockButtons[i].triggers.Add(entry);
+            }
+            else if (i > qualityTier)
+            {
+                qualityLockButtons[i].gameObject.SetActive(true);
+            }
+        }
+
+        //STYLES
+        List<int> stylesUnlocked = ItemStatsManager.current.GetUnlockedStyles(displayedItemInfo);
+
+        for (int i = 0; i < styleImages.Length; i++)
+        {
+            styleLockButtons[i].triggers.Clear();
+            styleImages[i].sprite = displayedItemInfo.itemStyles[i].sprites[0];
+            if (stylesUnlocked.Contains(i))
+            {
+                styleLockButtons[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                styleLockButtons[i].gameObject.SetActive(true);
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.PointerClick;
+                int x;
+                x = i;
+                entry.callback.AddListener((data) => { UnlockStyle(x); });
+                styleLockButtons[x].triggers.Add(entry);
+            }
+        }
+    }
+
+    public void UpgradeDiscount()
+    {
+        ItemStatsManager.current.UpgradeItemDiscountTier(displayedItemInfo);
+        UpdateItemUpgrades();
+    }
+
+    public void UpgradeQuality()
+    {
+        ItemStatsManager.current.UpgradeItemQualityTier(displayedItemInfo);
+        UpdateItemUpgrades();
+    }
+
+    public void UnlockStyle(int styleIdx)
+    {
+        ItemStatsManager.current.UnlockStyle(displayedItemInfo, styleIdx);
+        UpdateItemUpgrades();
     }
 }

@@ -168,7 +168,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2ad94d1ad28d42b449ec25ef6d6426be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -213,6 +213,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: e29d800fe34cd3d458664a3cda623f2e, type: 2}
+  surface: {fileID: 0}
+  itemsOnSurface: []
+  itemPickupProgress: 0
+  selected: 0
 --- !u!61 &6026541359053770278
 BoxCollider2D:
   m_ObjectHideFlags: 0

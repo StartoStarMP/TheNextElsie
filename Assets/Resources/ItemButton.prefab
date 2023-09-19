@@ -311,6 +311,12 @@ MonoBehaviour:
   itemImage: {fileID: 8309977679892235885}
   disableOverlay: {fileID: 7156484242181676864}
   disableText: {fileID: 3300237953615794213}
+  itemStyles: {fileID: 0}
+  itemStyleIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &8309977678007512167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +367,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -10, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8309977679892235884
 CanvasRenderer:
@@ -391,7 +397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4026462892994246781, guid: ce12b79ef7b6440458f0fdeb3dda1905, type: 3}
+  m_Sprite: {fileID: -7740369541922501482, guid: d079e1dd17b9612488bb30de77008ec0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

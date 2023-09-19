@@ -1417,6 +1417,8 @@ MonoBehaviour:
   affixesDisplay: {fileID: 7363290728081094582}
   dimensionsText: {fileID: 6414471101396522279}
   moneyText: {fileID: 6414471101853961306}
+  itemBlueprintIcon: {fileID: 6414471101783315036}
+  itemBlueprintName: {fileID: 6414471100783406501}
   locationChangeActive: 0
   selectedLocationIdx: 0
   nextLocationImage: {fileID: 2826521002432534082}
