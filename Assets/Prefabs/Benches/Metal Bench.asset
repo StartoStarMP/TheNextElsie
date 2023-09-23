@@ -19,6 +19,12 @@ MonoBehaviour:
   - {fileID: 5771104396716151637, guid: 5fc537095b47b864ca1dc4bf8e2c4206, type: 3}
   - {fileID: 5771104396716151637, guid: 01ccf0f82c0327d4ca01970b1dfe814f, type: 3}
   - {fileID: 5771104396716151637, guid: 0a0d4a4f91c25e541a7474d02a1da4e3, type: 3}
+  itemStyles:
+  - sprites:
+    - {fileID: -1866144050317040156, guid: 1d753bf61fac56344a7ff8a314c326bb, type: 3}
+    - {fileID: -3965735626542586777, guid: 1d753bf61fac56344a7ff8a314c326bb, type: 3}
+    - {fileID: 7786806753267867882, guid: 1d753bf61fac56344a7ff8a314c326bb, type: 3}
+    - {fileID: -3965735626542586777, guid: 1d753bf61fac56344a7ff8a314c326bb, type: 3}
   targetLayer: FloorObjects
   itemSprite: {fileID: 0}
   cost: 45

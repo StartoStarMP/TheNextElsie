@@ -108,6 +108,7 @@ public class Item : MonoBehaviour
         while (itemPickupProgress < 1)
         {
             itemPickupProgress += 0.015f;
+            GetComponent<Renderer>().material.SetFloat("_FillAmount", itemPickupProgress);
             yield return new WaitForSeconds(0.01f);
         }
         DesignManager.current.PickUpItem(this);
@@ -119,6 +120,7 @@ public class Item : MonoBehaviour
         while (itemPickupProgress > 0)
         {
             itemPickupProgress -= 0.05f;
+            GetComponent<Renderer>().material.SetFloat("_FillAmount", itemPickupProgress);
             yield return new WaitForSeconds(0.01f);
         }
     }

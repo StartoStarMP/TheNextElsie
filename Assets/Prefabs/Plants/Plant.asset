@@ -16,6 +16,9 @@ MonoBehaviour:
   itemType: 1
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 83db9022020f448489068c78d65397cc, type: 3}
+  itemStyles:
+  - sprites:
+    - {fileID: 1352955200029874055, guid: ab59e0041caffaf4d9aebb5a8598b1d4, type: 3}
   targetLayer: FloorObjects
   itemSprite: {fileID: 0}
   cost: 45

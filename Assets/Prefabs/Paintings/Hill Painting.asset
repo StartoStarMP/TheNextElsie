@@ -16,6 +16,9 @@ MonoBehaviour:
   itemType: 0
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 9ae3a7cf9a5ca9540b977214c7159ff2, type: 3}
+  itemStyles:
+  - sprites:
+    - {fileID: 973314779911330088, guid: cdf7a3412d5135f4398fa4f85a670e75, type: 3}
   targetLayer: WallObjects
   itemSprite: {fileID: 0}
   cost: 45

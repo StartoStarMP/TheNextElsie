@@ -16,6 +16,9 @@ MonoBehaviour:
   itemType: 2
   itemPrefab:
   - {fileID: 5771104396716151637, guid: 4749f614d3bf55a46bf940667f2f5078, type: 3}
+  itemStyles:
+  - sprites:
+    - {fileID: -5969255960653357180, guid: 3f4beba992cf39f48a431b3a6266ece5, type: 3}
   targetLayer: RugObjects
   itemSprite: {fileID: 0}
   cost: 45

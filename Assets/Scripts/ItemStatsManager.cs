@@ -22,7 +22,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 itemStat.discountTier += 1;
                 return;
@@ -34,7 +34,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 itemStat.qualityTier += 1;
                 return;
@@ -46,7 +46,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 itemStat.stylesUnlocked.Add(styleIdx);
             }
@@ -57,7 +57,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 return itemStat.discountTier;
             }
@@ -69,7 +69,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 return itemStat.qualityTier;
             }
@@ -81,7 +81,7 @@ public class ItemStatsManager : MonoBehaviour
     {
         foreach (ItemStat itemStat in itemStats)
         {
-            if (itemStat.item = itemInfo)
+            if (itemStat.item == itemInfo)
             {
                 return itemStat.stylesUnlocked;
             }

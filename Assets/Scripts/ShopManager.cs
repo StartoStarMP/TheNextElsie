@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,6 +68,7 @@ public class ShopManager : MonoBehaviour
     public EventTrigger[] qualityLockButtons;
     //STYLES
     public Text itemStyles;
+    public GameObject[] styleButtons;
     public Image[] styleImages;
     public EventTrigger[] styleLockButtons;
 
@@ -557,7 +559,7 @@ public class ShopManager : MonoBehaviour
             itemDiscountedCost.text = displayedItemInfo.cost.ToString();
         }
 
-        for(int i = 0; i < discountLockButtons.Length; i++)
+        for (int i = 0; i < discountLockButtons.Length; i++)
         {
             discountLockButtons[i].triggers.Clear();
 
@@ -568,11 +570,28 @@ public class ShopManager : MonoBehaviour
             else if (i == discountTier)
             {
                 discountLockButtons[i].gameObject.SetActive(true);
+                int x = i;
 
                 EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerClick;
-                entry.callback.AddListener((data) => { UpgradeDiscount(); });
+                entry.eventID = EventTriggerType.PointerDown;
+                entry.callback.AddListener((data) => 
+                { 
+                    StopAllCoroutines();
+                    StartCoroutine(_Fill(discountLockButtons[x].GetComponent<Image>(), delegate
+                    {
+                        UpgradeDiscount();
+                    }));
+                });
                 discountLockButtons[i].triggers.Add(entry);
+
+                EventTrigger.Entry entry2 = new EventTrigger.Entry();
+                entry2.eventID = EventTriggerType.PointerUp;
+                entry2.callback.AddListener((data) =>
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(_Unfill(discountLockButtons[x].GetComponent<Image>()));
+                });
+                discountLockButtons[x].triggers.Add(entry2);
             }
             else if (i > discountTier)
             {
@@ -598,9 +617,26 @@ public class ShopManager : MonoBehaviour
                 qualityLockButtons[i].gameObject.SetActive(true);
 
                 EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerClick;
-                entry.callback.AddListener((data) => { UpgradeQuality(); });
+                entry.eventID = EventTriggerType.PointerDown;
+                int x = i;
+                entry.callback.AddListener((data) =>
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(_Fill(qualityLockButtons[x].GetComponent<Image>(), delegate
+                    {
+                        UpgradeQuality();
+                    }));
+                });
                 qualityLockButtons[i].triggers.Add(entry);
+
+                EventTrigger.Entry entry2 = new EventTrigger.Entry();
+                entry2.eventID = EventTriggerType.PointerUp;
+                entry2.callback.AddListener((data) =>
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(_Unfill(qualityLockButtons[x].GetComponent<Image>()));
+                });
+                qualityLockButtons[x].triggers.Add(entry2);
             }
             else if (i > qualityTier)
             {
@@ -610,9 +646,16 @@ public class ShopManager : MonoBehaviour
 
         //STYLES
         List<int> stylesUnlocked = ItemStatsManager.current.GetUnlockedStyles(displayedItemInfo);
-
-        for (int i = 0; i < styleImages.Length; i++)
+        
+        itemStyles.text = "Styles (" + stylesUnlocked.Count + "/" + displayedItemInfo.itemStyles.Count + ")";
+        foreach (GameObject styleButton in styleButtons)
         {
+            styleButton.SetActive(false);
+        }
+
+        for (int i = 0; i < displayedItemInfo.itemStyles.Count; i++)
+        {
+            styleButtons[i].SetActive(true);
             styleLockButtons[i].triggers.Clear();
             styleImages[i].sprite = displayedItemInfo.itemStyles[i].sprites[0];
             if (stylesUnlocked.Contains(i))
@@ -622,13 +665,48 @@ public class ShopManager : MonoBehaviour
             else
             {
                 styleLockButtons[i].gameObject.SetActive(true);
+                styleLockButtons[i].GetComponent<Image>().fillAmount = 1;
                 EventTrigger.Entry entry = new EventTrigger.Entry();
-                entry.eventID = EventTriggerType.PointerClick;
-                int x;
-                x = i;
-                entry.callback.AddListener((data) => { UnlockStyle(x); });
+                entry.eventID = EventTriggerType.PointerDown;
+                int x = i;
+                entry.callback.AddListener((data) =>
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(_Fill(styleLockButtons[x].GetComponent<Image>(), delegate
+                    {
+                        UnlockStyle(x);
+                    }));
+                });
                 styleLockButtons[x].triggers.Add(entry);
+
+                EventTrigger.Entry entry2 = new EventTrigger.Entry();
+                entry2.eventID = EventTriggerType.PointerUp;
+                entry2.callback.AddListener((data) =>
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(_Unfill(styleLockButtons[x].GetComponent<Image>()));
+                });
+                styleLockButtons[x].triggers.Add(entry2);
             }
+        }
+    }
+
+    public IEnumerator _Fill(Image lockOverlay, Action action)
+    {
+        while (lockOverlay.fillAmount > 0)
+        {
+            lockOverlay.fillAmount -= 0.01f;
+            yield return new WaitForSeconds(0.01f);
+        }
+        action.Invoke();
+    }
+
+    public IEnumerator _Unfill(Image lockOverlay)
+    {
+        while (lockOverlay.fillAmount < 1)
+        {
+            lockOverlay.fillAmount += 0.05f;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
