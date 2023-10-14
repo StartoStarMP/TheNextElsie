@@ -15,8 +15,17 @@ MonoBehaviour:
   customType: 1
   itemType: 3
   itemPrefab: []
+  itemStyles:
+  - sprites:
+    - {fileID: -3791982592601006248, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
+  - sprites:
+    - {fileID: -1372042679447052737, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
+  - sprites:
+    - {fileID: 4854173186899089919, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
+  - sprites:
+    - {fileID: 850182263813647558, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
   targetLayer: 
-  itemSprite: {fileID: -3135093263716482174, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
+  itemSprite: {fileID: -3791982592601006248, guid: 485807cb04d649a44a7e732f94001be4, type: 3}
   cost: 0
   colors: 
   themes: 

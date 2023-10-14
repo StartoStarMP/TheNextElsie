@@ -70,12 +70,42 @@ public class SceneLoader : MonoBehaviour
             GetComponent<Animator>().SetTrigger("blackFadeOut");
         }
         currentLoadingScreenType = LoadingScreenType.None;
+
+        //CHOOSE CORRECT MUSIC
+        if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("Mission"))
+        {
+            List<string> designMusic = new List<string>(){ "Design1"};
+            int randInt = UnityEngine.Random.Range(0, designMusic.Count);
+            AudioManager.current.PlayMusic(designMusic[randInt]);
+        }
+        else if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("Home"))
+        {
+            AudioManager.current.PlayMusic("Home");
+        }
+        else if (SceneManager.GetSceneByBuildIndex(level) == SceneManager.GetSceneByName("Furniture Plaza"))
+        {
+            AudioManager.current.PlayMusic("CoolShop");
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //CHOOSE CORRECT MUSIC
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Mission"))
+        {
+            List<string> designMusic = new List<string>() { "Design1" };
+            int randInt = UnityEngine.Random.Range(0, designMusic.Count);
+            AudioManager.current.PlayMusic(designMusic[randInt]);
+        }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Home"))
+        {
+            AudioManager.current.PlayMusic("Home");
+        }
+        else if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Furniture Plaza"))
+        {
+            AudioManager.current.PlayMusic("CoolShop");
+        }
     }
 
     // Update is called once per frame
@@ -157,6 +187,12 @@ public class SceneLoader : MonoBehaviour
 
     public void ConfirmLocation()
     {
+        if (selectedLocationIdx == 1 || selectedLocationIdx == 3)
+        {
+            Debug.Log(locationNames[selectedLocationIdx] + " scene not found.");
+            return;
+        }
+
         SetLocationChangeMenu(false);
 
         StartCoroutine(Timer(x => LoadScene(locationNames[selectedLocationIdx], LoadingScreenType.BlackScreen), 0.5f));

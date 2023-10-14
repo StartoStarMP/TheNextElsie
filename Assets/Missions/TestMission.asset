@@ -20,31 +20,9 @@ MonoBehaviour:
   gridWidth: 10
   gridHeight: 8
   affixes:
-  - reqType: 0
-    roomType: 0
-    item: {fileID: 0}
-    itemCount: 0
-    color: 0
-    colorRatio: 0
-    theme: 0
-    themeRatio: 0
-    categoryType: 0
-    categoryTypeCount: 0
-    uniqueCondition: 0
-  - reqType: 2
-    roomType: 0
-    item: {fileID: 0}
-    itemCount: 0
-    color: 1
-    colorRatio: 0.5
-    theme: 0
-    themeRatio: 0
-    categoryType: 0
-    categoryTypeCount: 0
-    uniqueCondition: 0
   - reqType: 1
     roomType: 0
-    item: {fileID: 11400000, guid: 21de8a7773e203543b1ce9ac4d23b42c, type: 2}
+    item: {fileID: 11400000, guid: b3f7dfad9d772af409f91f78ed876d21, type: 2}
     itemCount: 1
     color: 0
     colorRatio: 0
@@ -53,16 +31,49 @@ MonoBehaviour:
     categoryType: 0
     categoryTypeCount: 0
     uniqueCondition: 0
-  - reqType: 4
+  - reqType: 1
     roomType: 0
-    item: {fileID: 0}
-    itemCount: 0
+    item: {fileID: 11400000, guid: 9c146f3f573f80745959566927a79159, type: 2}
+    itemCount: 1
     color: 0
     colorRatio: 0
     theme: 0
     themeRatio: 0
-    categoryType: 1
-    categoryTypeCount: 1
+    categoryType: 0
+    categoryTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 1
+    roomType: 0
+    item: {fileID: 11400000, guid: 23c8c2aa240e46b4bad104eff9c56511, type: 2}
+    itemCount: 1
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    categoryType: 0
+    categoryTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 1
+    roomType: 0
+    item: {fileID: 11400000, guid: 4908ea6aa36957c45bb60d547700f290, type: 2}
+    itemCount: 1
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    categoryType: 0
+    categoryTypeCount: 0
+    uniqueCondition: 0
+  - reqType: 1
+    roomType: 0
+    item: {fileID: 11400000, guid: 5ea0f473fd9464749875508bb142dcac, type: 2}
+    itemCount: 1
+    color: 0
+    colorRatio: 0
+    theme: 0
+    themeRatio: 0
+    categoryType: 0
+    categoryTypeCount: 0
     uniqueCondition: 0
   missionMoney: 90
   itemBlueprint: {fileID: 0}

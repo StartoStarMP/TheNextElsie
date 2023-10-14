@@ -62,12 +62,16 @@ public class MissionManager : MonoBehaviour
             gameObject.SetActive(true);
             laptopStatus.text = "Opening...";
             GetComponent<Animator>().SetTrigger("open");
+
+            AudioManager.current.PlaySoundEffect("dialogueCharacterClose-Stardew");
         }
         else if (!active && gameObject.activeInHierarchy)
         {
             laptopStatus.text = "Closing...";
             GetComponent<Animator>().SetTrigger("close");
             StartCoroutine(Timer(x => gameObject.SetActive(false), 0.75f));
+
+            AudioManager.current.PlaySoundEffect("bigDeSelect-Stardew");
         }
     }
 
@@ -104,7 +108,7 @@ public class MissionManager : MonoBehaviour
         newMission.floorSprite = floorOptions[Random.Range(0, floorOptions.Length)];
 
         newMission.gridWidth = Random.Range(8, 15);
-        newMission.gridHeight = Random.Range(10, 20);
+        newMission.gridHeight = Random.Range(10, 15);
 
         //GENERATE AFFIXES
         int numAffixes = Random.Range(0,4);
@@ -116,7 +120,9 @@ public class MissionManager : MonoBehaviour
 
             if (newRequirement.reqType == RequirementType.Color)
             {
-                newRequirement.color = (ColorType)Random.Range(0, (int)System.Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Max());
+                //newRequirement.color = (ColorType)Random.Range(0, (int)System.Enum.GetValues(typeof(ColorType)).Cast<ColorType>().Max());
+                //newRequirement.colorRatio = 0.2f;
+                continue;
             }
             else if (newRequirement.reqType == RequirementType.Item)
             {
@@ -135,7 +141,9 @@ public class MissionManager : MonoBehaviour
             }
             else if (newRequirement.reqType == RequirementType.Theme)
             {
-                newRequirement.theme = (ThemeType)Random.Range(0, (int)System.Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().Max());
+                //newRequirement.theme = (ThemeType)Random.Range(0, (int)System.Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().Max());
+                //newRequirement.themeRatio = 0.2f;
+                continue;
             }
             else if (newRequirement.reqType == RequirementType.Unique)
             {
@@ -154,7 +162,7 @@ public class MissionManager : MonoBehaviour
         {
             int randItem = Random.Range(0, GameManager.current.lockedItems.Count);
             newMission.itemBlueprint = GameManager.current.lockedItems[randItem];
-            GameManager.current.lockedItems.RemoveAt(randItem);
+            //GameManager.current.lockedItems.RemoveAt(randItem);
         }
         return newMission;
     }
@@ -167,6 +175,8 @@ public class MissionManager : MonoBehaviour
         {
             missionButton.SetMission(GenerateRandomMission());
         }
+
+        AudioManager.current.PlaySoundEffect("smallSelect-Stardew");
     }
 
     IEnumerator Timer(System.Action<bool> assigner, float waitTime)

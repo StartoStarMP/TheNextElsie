@@ -8,21 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Home.unity
     guid: 5fd933c53dbac0a48acfc7ee12fea0e1
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Mission.unity
     guid: 549cf04d09d4d2f448a7b9fcd32f7f88
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Furniture Plaza.unity
     guid: df78100ed5540b546b862a1a51fd98a2

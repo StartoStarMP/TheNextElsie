@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public List<int> npcReps;
 
     [Tooltip("If true, will enable MouseHover checks in Item script. False by default.")]
-    public bool inEditMode = false;
+    //public bool inEditMode = false;
 
     [Header("Items")]
     public List<ItemInfo> unlockedItems;

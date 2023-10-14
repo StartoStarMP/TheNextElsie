@@ -8,6 +8,7 @@ public class PlacementTool : MonoBehaviour
     public List<Item> possibleSurfaces = new List<Item>();
     public ItemInfo selectedItem;
     public bool placementReady = false;
+    public int selectedStyle = 0;
     public int selectedRotation = 0;
     public bool limitedUse = false;
 
@@ -53,12 +54,16 @@ public class PlacementTool : MonoBehaviour
             if (selectedItem.targetLayer == "RugObjects")
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, 0.5f), transform.rotation) as GameObject;
+                newItem.GetComponent<Item>().rotation = selectedRotation;
+                newItem.GetComponent<Item>().SelectStyle(selectedStyle);
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10);
                 newItem.GetComponent<Item>().rotation = selectedRotation;
             }
             else if (CheckIfSurfaceAvailable())
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, -0.5f), transform.rotation) as GameObject;
+                newItem.GetComponent<Item>().rotation = selectedRotation;
+                newItem.GetComponent<Item>().SelectStyle(selectedStyle);
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10) + 50;
                 possibleSurfaces[0].itemsOnSurface.Add(newItem.GetComponent<Item>());
                 newItem.GetComponent<Item>().surface = possibleSurfaces[0];
@@ -67,6 +72,8 @@ public class PlacementTool : MonoBehaviour
             else
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, 0), transform.rotation) as GameObject;
+                newItem.GetComponent<Item>().rotation = selectedRotation;
+                newItem.GetComponent<Item>().SelectStyle(selectedStyle);
                 newItem.GetComponent<SpriteRenderer>().sortingOrder = Mathf.RoundToInt(newItem.transform.position.y * -10);
                 newItem.GetComponent<Item>().rotation = selectedRotation;
             }
@@ -102,15 +109,17 @@ public class PlacementTool : MonoBehaviour
         {
             selectedRotation = 0;
         }
-        SetSelectedItem(selectedItem, selectedRotation);
+        SetSelectedItem(selectedItem, selectedStyle, selectedRotation);
     }
 
-    public void SetSelectedItem(ItemInfo itemInfo, int rotation = 0)
+    public void SetSelectedItem(ItemInfo itemInfo, int styleIdx = 0, int rotation = 0)
     {
         Debug.Log(itemInfo);
         selectedItem = itemInfo;
+        selectedStyle = styleIdx;
         selectedRotation = rotation;
-        GetComponent<SpriteRenderer>().sprite = itemInfo.itemPrefab[rotation].GetComponent<SpriteRenderer>().sprite;
+        //GetComponent<SpriteRenderer>().sprite = itemInfo.itemPrefab[rotation].GetComponent<SpriteRenderer>().sprite;
+        GetComponent<SpriteRenderer>().sprite = itemInfo.itemStyles[styleIdx].sprites[rotation];
         GetComponent<SpriteRenderer>().flipX = itemInfo.itemPrefab[rotation].GetComponent<SpriteRenderer>().flipX;
         GetComponent<BoxCollider2D>().offset = itemInfo.itemPrefab[rotation].transform.GetChild(0).GetComponent< BoxCollider2D>().offset;
         GetComponent<BoxCollider2D>().size = itemInfo.itemPrefab[rotation].transform.GetChild(0).GetComponent<BoxCollider2D>().size;

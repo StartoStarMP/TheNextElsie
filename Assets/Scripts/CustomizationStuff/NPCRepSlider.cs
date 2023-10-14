@@ -18,15 +18,6 @@ public class NPCRepSlider : MonoBehaviour
         SetSlider();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            AddRep(50);
-        }
-    }
-
     public void AddRep(int pointsToAdd)
     {
         addedPointsText.text = "+ " + pointsToAdd.ToString();

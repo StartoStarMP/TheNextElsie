@@ -101,7 +101,7 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 35200690b1d2f1e4eb17c7490204c0e4, type: 2}
     discountTier: 0
     qualityTier: 0
-    stylesUnlocked: 00000000
+    stylesUnlocked: 00000000010000000200000003000000
   - item: {fileID: 11400000, guid: d3091603ecf99304d9127a35441d89b5, type: 2}
     discountTier: 0
     qualityTier: 0
@@ -227,6 +227,98 @@ MonoBehaviour:
     qualityTier: 0
     stylesUnlocked: 00000000
   - item: {fileID: 11400000, guid: f3b138b0ad1b36a44adf84848dca8177, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 4688587b7c88d1d439a512e6212b5fb3, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 021824d6f8a5cc54ea04966e50adced7, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 7023bd8234a2d034d9ebf3ec58b72531, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: ed6341f5a6706874fa083b627cfe2616, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 4763c605db6c98a48948c69da0034b67, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: ba41183a2c775404296aa7338a7f923b, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: e368967f997c75b4ea5fc8d53c3441c9, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 9c146f3f573f80745959566927a79159, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 028f070fae5dcc545a11d811990a10a8, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: dd232bd34ec0c054baf16bd3f1d45248, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 1516f21c8f55a5647a37cc5e99045999, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 953f87a76e1c72c46b8158f968013488, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 76bf8fc972a97ff48bcee3a3d95d8187, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: eded393cff23a7a42954d76153836583, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 2203a597b8a49c44480155f1d15436e4, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 013214f0d3a896d42b3490eedafb6aa0, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: ed657fbadcb08724eaa57415c63eca59, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 87ffacba180a72e4a80bf5dedcff43d8, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: d76b8f0eb1047ee4fafab4db70139683, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: feaa7b6c7014a8443b31250cbeedbac4, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 269c089be19350f428755e15ba5775a9, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 145865cc34f7ec744af9ff04c411b931, type: 2}
+    discountTier: 0
+    qualityTier: 0
+    stylesUnlocked: 00000000
+  - item: {fileID: 11400000, guid: 4908ea6aa36957c45bb60d547700f290, type: 2}
     discountTier: 0
     qualityTier: 0
     stylesUnlocked: 00000000

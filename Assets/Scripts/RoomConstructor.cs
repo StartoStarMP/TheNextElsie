@@ -43,10 +43,10 @@ public class RoomConstructor : MonoBehaviour
         roomFloor.sprite = floorSprite;
 
         roomBorder.size = new Vector2(width + 1, height + 1);
-        roomWall.transform.localPosition = new Vector2(0, (height-3)/2f);
+        roomWall.transform.localPosition = new Vector3(0, (height-3)/2f, 0.5f);
         roomWall.size = new Vector2(width, 3);
         roomWall.GetComponent<BoxCollider2D>().size = new Vector2(width, 3);
-        roomFloor.transform.localPosition = new Vector2(0, (-3)/2f);
+        roomFloor.transform.localPosition = new Vector3(0, (-3)/2f, 0.5f);
         roomFloor.size = new Vector2(width, height - 3);
         roomFloor.GetComponent<BoxCollider2D>().size = new Vector2(width, height - 3);
 

@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 public class DesignManager : MonoBehaviour
 {
     public static DesignManager current;
+    public bool inEditMode = false;
     public GameObject designUI;
 
     [Header("Budget")]
@@ -75,6 +76,23 @@ public class DesignManager : MonoBehaviour
 
     public void Start()
     {
+        if (!inEditMode)
+        {
+            return;
+        }
+
+        List<ItemInfo> requiredItems = new List<ItemInfo>();
+        foreach (Requirement affixEntry in GameManager.current.currentMission.affixes)
+        {
+            if (affixEntry.reqType == RequirementType.Item)
+            {
+                for(int i = 0; i < affixEntry.itemCount; i++)
+                {
+                    requiredItems.Add(affixEntry.item);
+                }
+            }
+        }
+
         budgetSlider.maxValue = maxBudget;
         budgetSlider.value = maxBudget;
         budgetText.text = maxBudget.ToString();
@@ -90,11 +108,27 @@ public class DesignManager : MonoBehaviour
             wallButtons.Add(categoryRows[0].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        List<ItemInfo> currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.WallObject });
+        //List<ItemInfo> currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.WallObject });
+        List<ItemInfo> currentItemsToSet = new List<ItemInfo>();
+        foreach(ItemInfo itemInfo in requiredItems)
+        {
+            if (itemInfo.itemType == ItemType.WallObject && !currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+        foreach (ItemInfo itemInfo in GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.WallObject }))
+        {
+            if (!currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
             ItemInfo wallItem = currentItemsToSet[i];
-            wallButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i]);
+            wallButtons[i].transform.GetComponent<ItemButton>().SetDetails(wallItem, requiredItems.Contains(wallItem));
             wallButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(wallItem); });
             wallButtons[i].gameObject.SetActive(true);
         }
@@ -105,13 +139,29 @@ public class DesignManager : MonoBehaviour
             floorButtons.Add(categoryRows[1].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.FloorObject });
+        //currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.FloorObject });
+        currentItemsToSet.Clear();
+        foreach (ItemInfo itemInfo in requiredItems)
+        {
+            if (itemInfo.itemType == ItemType.FloorObject && !currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+        foreach (ItemInfo itemInfo in GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.FloorObject }))
+        {
+            if (!currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
             int x;
             x = i;
             ItemInfo floorItem = currentItemsToSet[x];
-            floorButtons[x].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[x]);
+            floorButtons[x].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[x], requiredItems.Contains(floorItem));
             floorButtons[x].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(floorItem); });
 
             /*EventTrigger.Entry entry = new EventTrigger.Entry();
@@ -139,11 +189,27 @@ public class DesignManager : MonoBehaviour
             rugButtons.Add(categoryRows[2].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.RugObject });
+        //currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.RugObject });
+        currentItemsToSet.Clear();
+        foreach (ItemInfo itemInfo in requiredItems)
+        {
+            if (itemInfo.itemType == ItemType.RugObject && !currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+        foreach (ItemInfo itemInfo in GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.RugObject }))
+        {
+            if (!currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
             ItemInfo rugItem = currentItemsToSet[i];
-            rugButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i]);
+            rugButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i], requiredItems.Contains(rugItem));
             rugButtons[i].GetComponent<Button>().onClick.AddListener(delegate { StartPlacementTool(rugItem); });
             rugButtons[i].gameObject.SetActive(true);
         }
@@ -154,14 +220,30 @@ public class DesignManager : MonoBehaviour
             wallTileButtons.Add(categoryRows[3].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Wallpaper });
+        //currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Wallpaper });
+        currentItemsToSet.Clear();
+        foreach (ItemInfo itemInfo in requiredItems)
+        {
+            if (itemInfo.itemType == ItemType.Wallpaper && !currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+        foreach (ItemInfo itemInfo in GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Wallpaper }))
+        {
+            if (!currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
             int x;
             x = i;
             ItemInfo wallpaperItem = currentItemsToSet[i];
-            wallTileButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i]);
-            wallTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeWallTiles(wallTileButtons[x].GetComponent<Button>(), wallpaperItem.itemSprite); });
+            wallTileButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i], requiredItems.Contains(wallpaperItem));
+            wallTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeWallTiles(wallTileButtons[x].GetComponent<Button>(), wallpaperItem); });
             wallTileButtons[i].gameObject.SetActive(true);
         }
 
@@ -171,14 +253,30 @@ public class DesignManager : MonoBehaviour
             floorTileButtons.Add(categoryRows[4].transform.GetChild(0).GetChild(i).gameObject);
         }
 
-        currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Flooring });
+        //currentItemsToSet = GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Flooring });
+        currentItemsToSet.Clear();
+        foreach (ItemInfo itemInfo in requiredItems)
+        {
+            if (itemInfo.itemType == ItemType.Flooring && !currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+        foreach (ItemInfo itemInfo in GameManager.current.GetAvailableItems(new List<ItemType>() { ItemType.Flooring }))
+        {
+            if (!currentItemsToSet.Contains(itemInfo))
+            {
+                currentItemsToSet.Add(itemInfo);
+            }
+        }
+
         for (int i = 0; i < currentItemsToSet.Count; i++)
         {
             int x;
             x = i;
             ItemInfo flooringItem = currentItemsToSet[i];
-            floorTileButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i]);
-            floorTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeFloorTiles(floorTileButtons[x].GetComponent<Button>(), flooringItem.itemSprite); });
+            floorTileButtons[i].transform.GetComponent<ItemButton>().SetDetails(currentItemsToSet[i], requiredItems.Contains(flooringItem));
+            floorTileButtons[i].GetComponent<Button>().onClick.AddListener(delegate { ChangeFloorTiles(floorTileButtons[x].GetComponent<Button>(), flooringItem); });
             floorTileButtons[i].gameObject.SetActive(true);
         }
 
@@ -199,10 +297,6 @@ public class DesignManager : MonoBehaviour
             if (selectedItem != null)
             {
                 DeselectItem();
-                if (itemContextPopup.activeInHierarchy)
-                {
-                    itemContextPopup.SetActive(false);
-                }
             }
         }
         if (Input.GetKeyDown(KeyCode.Q))
@@ -298,20 +392,24 @@ public class DesignManager : MonoBehaviour
         SelectCategory(currentCategory);
     }
 
-    public void StartPlacementTool(ItemInfo itemInfo, bool limitedUse = false)
+    public void StartPlacementTool(ItemInfo itemInfo, int styleIdx = 0, int rotationIdx = 0, bool limitedUse = false)
     {
+        DeselectItem();
+
         placementTool.gameObject.SetActive(true);
         placementTool.gameObject.GetComponent<PlacementTool>().limitedUse = limitedUse;
 
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         placementTool.transform.position = new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, 1);
-        placementTool.SetSelectedItem(itemInfo);
+        placementTool.SetSelectedItem(itemInfo, styleIdx, rotationIdx);
         placementText.gameObject.SetActive(true);
         StartCoroutine(placementTool.GetComponent<PlacementTool>().DelayPlacement());
     }
 
     public void SelectItem(Item item)
     {
+        DeselectItem();
+
         selectedItem = item;
         selectedItem.Highlight(Color.white);
         selectedItem.selected = true;
@@ -320,9 +418,19 @@ public class DesignManager : MonoBehaviour
 
     public void DeselectItem()
     {
+        if (selectedItem == null)
+        {
+            return;
+        }
+
         selectedItem.Highlight(Color.clear);
         selectedItem.selected = false;
         selectedItem = null;
+
+        if (itemContextPopup.activeInHierarchy)
+        {
+            itemContextPopup.SetActive(false);
+        }
     }
 
     public void PickUpItem(Item item)
@@ -349,8 +457,10 @@ public class DesignManager : MonoBehaviour
             item.surface.itemsOnSurface.Remove(item);
         }
 
-        StartPlacementTool(item.itemInfo, true);
+        StartPlacementTool(item.itemInfo, item.style, item.rotation, true);
         RemoveItem(item);
+
+        AudioManager.current.PlaySoundEffect("coin-Stardew");
     }
 
     public void RemoveItem(Item item)
@@ -377,37 +487,47 @@ public class DesignManager : MonoBehaviour
             if (i == idx)
             {
                 categoryRows[i].SetActive(true);
-                categoryTabs[i].SetActive(true);
+                //categoryTabs[i].SetActive(true);
             }
             else
             {
                 categoryRows[i].SetActive(false);
-                categoryTabs[i].SetActive(false);
+                //categoryTabs[i].SetActive(false);
             }
         }
         Filter();
     }
 
-    public void ChangeWallTiles(Button button, Sprite sprite)
+    public void ChangeWallTiles(Button button, ItemInfo itemInfo, int style = 0)
     {
+        DeselectItem();
+
         if (selectedWallTile != null)
         {
             selectedWallTile.GetComponent<Outline>().enabled = false;
         }
         selectedWallTile = button;
         selectedWallTile.GetComponent<Outline>().enabled = true;
-        wall.sprite = sprite;
+        wall.sprite = itemInfo.GetItemSpriteToDisplay();
+
+        wall.GetComponent<Item>().itemInfo = itemInfo;
+        wall.GetComponent<Item>().style = style;
     }
 
-    public void ChangeFloorTiles(Button button, Sprite sprite)
+    public void ChangeFloorTiles(Button button, ItemInfo itemInfo, int style = 0)
     {
+        DeselectItem();
+
         if (selectedFloorTile != null)
         {
             selectedFloorTile.GetComponent<Outline>().enabled = false;
         }
         selectedFloorTile = button;
         selectedFloorTile.GetComponent<Outline>().enabled = true;
-        floor.sprite = sprite;
+        floor.sprite = itemInfo.GetItemSpriteToDisplay();
+
+        floor.GetComponent<Item>().itemInfo = itemInfo;
+        floor.GetComponent<Item>().style = style;
     }
 
     public void AdjustBudget(int amount)
@@ -640,7 +760,7 @@ public class DesignManager : MonoBehaviour
 
     public void Finish()
     {
-        GameManager.current.inEditMode = false;
+        inEditMode = false;
 
         StartCoroutine(Timer(x => designUI.SetActive(false), 0.5f));
         StartCoroutine(Timer(x => EvaluationManager.current.StartCoroutine("GatherPointsBreakdown"), 0.5f));

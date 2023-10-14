@@ -47,7 +47,7 @@ public class AffixManager : MonoBehaviour
         //PREFERED COLOR
         if (requirement.reqType == RequirementType.Color)
         {
-            if (DesignManager.current.colorTypes.Count(n => n == requirement.color)/(float)DesignManager.current.colorTypes.Count > requirement.colorRatio)
+            if (DesignManager.current.colorTypes.Count(n => n == requirement.color) / (float)DesignManager.current.colorTypes.Count > requirement.colorRatio)
             {
                 return true;
             }
@@ -58,7 +58,7 @@ public class AffixManager : MonoBehaviour
             Item[] placedItems = FindObjectsOfType<Item>();
             List<ItemInfo> placedItemInfos = new List<ItemInfo>();
 
-            foreach(Item item in placedItems)
+            foreach (Item item in placedItems)
             {
                 placedItemInfos.Add(item.itemInfo);
             }
@@ -173,10 +173,17 @@ public class AffixManager : MonoBehaviour
         {
             if (affixEntry.gameObject.activeInHierarchy)
             {
-                affixCompletionStats.Add(affixEntry.currentProgress/affixEntry.maxProgress);
+                affixCompletionStats.Add(affixEntry.currentProgress / affixEntry.maxProgress);
             }
         }
 
-        return affixCompletionStats.Sum()/affixCompletionStats.Count;
+        if (affixCompletionStats.Count == 0)
+        {
+            return 1f;
+        }
+        else
+        {
+            return affixCompletionStats.Sum() / affixCompletionStats.Count;
+        }
     }
 }

@@ -29,6 +29,7 @@ public class ShopManager : MonoBehaviour
     public Sprite[] shopLogoBgs;
     public Sprite[] shopViewBgs;
     public Sprite[] shopItemBgs;
+    public AudioClip[] shopMusic;
     public int currentShop = 0;
     public Transform[] shopLocations;
     public Transform[] shopItemPreviewPos;
@@ -135,6 +136,8 @@ public class ShopManager : MonoBehaviour
             }
             SelectShop(currentShop, 1);
         }
+
+        AudioManager.current.PlaySoundEffect("brush-Stardew");
     }
 
     public IEnumerator SwitchShopCamera(Transform focusTarget, int direction)
@@ -149,7 +152,7 @@ public class ShopManager : MonoBehaviour
 
         if (direction == 1)
         {
-            Debug.Log("right");
+            //Debug.Log("right");
             while (i <= 25)
             {
                 formerShopCameraView.color = new Color(1, 1, 1, 1 - i / 25f);
@@ -162,7 +165,7 @@ public class ShopManager : MonoBehaviour
         }
         else if (direction == -1)
         {
-            Debug.Log("left");
+            //Debug.Log("left");
             while (i <= 25)
             {
                 formerShopCameraView.color = new Color(1, 1, 1, 1 - i / 25f);
@@ -219,6 +222,9 @@ public class ShopManager : MonoBehaviour
         {
             Destroy(currentItemPreview);
         }
+
+        float currentTrackTime = AudioManager.current.musicPlayer.time;
+        AudioManager.current.PlayMusic(shopMusic[idx].name, currentTrackTime);
     }
 
     public void SetupPurchasesDisplay()
@@ -384,6 +390,8 @@ public class ShopManager : MonoBehaviour
                 flooringPreview.sprite = itemInfo.itemSprite;
             }
         }
+
+
     }
 
     public void ViewUpgradeableItem(ItemInfo itemInfo)
@@ -471,7 +479,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("not enough money");
+            Debug.LogError("Not enough money.");
         }
     }
 

@@ -11,6 +11,7 @@ public class EvaluationManager : MonoBehaviour
     public static EvaluationManager current;
 
     [Header("Starting")]
+    public NPCDisplay clientDisplay;
     public GameObject evaluationUI;
     public bool finishButtonOn = true;
     public Image certifiedIcon;
@@ -87,7 +88,6 @@ public class EvaluationManager : MonoBehaviour
 
     public IEnumerator _Fill()
     {
-        Debug.Log("ya");
         while (certifiedIcon.fillAmount < 1)
         {
             certifiedIcon.fillAmount += 0.015f;
@@ -99,7 +99,6 @@ public class EvaluationManager : MonoBehaviour
 
     public IEnumerator _Unfill()
     {
-        Debug.Log("no");
         while (certifiedIcon.fillAmount > 0)
         {
             certifiedIcon.fillAmount -= 0.05f;
@@ -147,31 +146,31 @@ public class EvaluationManager : MonoBehaviour
         evaluationAnim.SetTrigger("rankReveal");
         yield return new WaitForSeconds(0.5f);
         confetti.Play();
-        if (evaluationSlider.value < 250)
+        if (evaluationSlider.value < 200)
         {
             rankLevel = 0;
             flairText.text = "Awful...";
             starsRank.sprite = starRankSprites[0];
         }
-        else if (evaluationSlider.value < 500)
+        else if (evaluationSlider.value < 400)
         {
             rankLevel = 1;
             flairText.text = "Ok...";
             starsRank.sprite = starRankSprites[1];
         }
-        else if (evaluationSlider.value < 750)
+        else if (evaluationSlider.value < 600)
         {
             rankLevel = 2;
             flairText.text = "Great!";
             starsRank.sprite = starRankSprites[2];
         }
-        else if (evaluationSlider.value < 1000)
+        else if (evaluationSlider.value < 800)
         {
             rankLevel = 3;
             flairText.text = "Amazing!";
             starsRank.sprite = starRankSprites[3];
         }
-        else if (evaluationSlider.value == 1000)
+        else if (evaluationSlider.value == 800)
         {
             rankLevel = 4;
             flairText.text = "PERFECT!!!";
@@ -214,6 +213,7 @@ public class EvaluationManager : MonoBehaviour
                 unlockedItemIcon.sprite = GameManager.current.currentMission.itemBlueprint.GetItemSpriteToDisplay();
                 unlockedItemText.text = GameManager.current.currentMission.itemBlueprint.name;
                 GameManager.current.unlockedItems.Add(GameManager.current.currentMission.itemBlueprint);
+                GameManager.current.lockedItems.Remove(GameManager.current.currentMission.itemBlueprint);
             }
             else
             {
@@ -225,7 +225,7 @@ public class EvaluationManager : MonoBehaviour
             yield return UIElementFlyInOut(playerRewards, true);
 
             //moneyCount.AddMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
-            GameManager.current.ChangePlayerMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3));
+            GameManager.current.ChangePlayerMoney((int)(GameManager.current.currentMission.missionMoney * rankLevel / 3f));
             forwardRecapButton.interactable = true;
         }
         //SHOW REPUTATION
@@ -277,6 +277,7 @@ public class EvaluationManager : MonoBehaviour
 
     public IEnumerator GatherPointsBreakdown()
     {
+        clientDisplay.CreateNPCDisplay(GameManager.current.currentMission.clientInfo);
         evaluationStartAnim.SetTrigger("start");
 
         yield return new WaitForSeconds(1f);
@@ -284,15 +285,15 @@ public class EvaluationManager : MonoBehaviour
         evaluationUI.SetActive(true);
 
         //GET TOTAL POINT VALUE
-        AddToBreakdown("Total Point Value", (int)(250 * TotalPointValue() / DesignManager.current.maxBudget));
+        AddToBreakdown("Total Point Value", (int)(250 * TotalPointValue() * 1.2f / DesignManager.current.maxBudget));
         //ESSENTIAL REQUIREMENTS
         AddToBreakdown("Essentials", (int)(250 * Essentials()));
         //ROOM NAVIGATION
         CoroutineWithData cd = new CoroutineWithData(this, RoomNavigation());
         yield return cd.coroutine;
-        AddToBreakdown("Room Navigation", (int)(250 * (float)cd.result));
+        AddToBreakdown("Room Navigation", (int)(50 * (float)cd.result));
         //REMAINING BUDGET
-        AddToBreakdown("Remaining Budget", (int)(250 * DesignManager.current.currentBudget/DesignManager.current.maxBudget));
+        AddToBreakdown("Remaining Budget", (int)(250 * 0.5f * DesignManager.current.currentBudget/DesignManager.current.maxBudget));
         //DECORATIONS
         AddToBreakdown("Decorations", (int)Decorations());
 
@@ -425,6 +426,7 @@ public class EvaluationManager : MonoBehaviour
         //Item[] items = Item.FindObjectsOfType<Item>();
         int currentPoints = 0;
         int maxPoints = 0;
+        affixManager.GetCurrentAffixesProgress();
 
         return affixManager.GetTotalAffixCompletionStat();
     }
@@ -477,7 +479,7 @@ public class EvaluationManager : MonoBehaviour
             }
         }
 
-        Debug.Log(navigablePos.Count);
+        //Debug.Log(navigablePos.Count);
 
         for (int i = 0; i < navigablePos.Count; i++)
         {
@@ -488,11 +490,11 @@ public class EvaluationManager : MonoBehaviour
                     CoroutineWithData cd = new CoroutineWithData(this, StartPathing(navigablePos[i], navigablePos[j]));
                     yield return cd.coroutine;
 
-                    Debug.Log("Path length: " + cd.result);
-                    Debug.Log("Distance between beds: " + Vector3.Distance(navigablePos[i], navigablePos[j]));
+                    //Debug.Log("Path length: " + cd.result);
+                    //Debug.Log("Distance between beds: " + Vector3.Distance(navigablePos[i], navigablePos[j]));
 
-                    Debug.Log(navigablePos[i]);
-                    Debug.Log(navigablePos[j]);
+                    //Debug.Log(navigablePos[i]);
+                    //Debug.Log(navigablePos[j]);
 
                     if ((float)cd.result < Vector3.Distance(navigablePos[i], navigablePos[j]) + 2)
                     {
@@ -503,13 +505,13 @@ public class EvaluationManager : MonoBehaviour
             }
         }
 
-        Debug.Log("possible paths: " + possiblePaths);
-        Debug.Log("all paths: " + allPaths);
+        //Debug.Log("possible paths: " + possiblePaths);
+        //Debug.Log("all paths: " + allPaths);
         roomNavigationStat = possiblePaths * 1.0f / allPaths;
-        Debug.Log("room nav stat: " + roomNavigationStat);
+        //Debug.Log("room nav stat: " + roomNavigationStat);
         if (allPaths == 0)
         {
-            yield return 0.01f;
+            yield return 1f;
         }
         else
         {

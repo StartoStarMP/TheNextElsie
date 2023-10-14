@@ -18,12 +18,23 @@ public class ItemButton : MonoBehaviour
         
     }
 
-    public void SetDetails(ItemInfo newItemInfo)
+    public void SetDetails(ItemInfo newItemInfo, bool required = false)
     {
         itemInfo = newItemInfo;
         itemImage.sprite = itemInfo.GetItemSpriteToDisplay();
 
         GetComponent<Button>().interactable = true;
+
+        if (required)
+        {
+            GetComponent<Image>().color = new Color(1,1,1,1);
+            GetComponent<Outline>().effectColor = new Color(1,0,0.5f,1);
+        }
+        else
+        {
+            GetComponent<Image>().color = new Color(1,1,1,0);
+            GetComponent<Outline>().effectColor = new Color(0, 0, 0, 1);
+        }
         disableOverlay.SetActive(false);
     }
 

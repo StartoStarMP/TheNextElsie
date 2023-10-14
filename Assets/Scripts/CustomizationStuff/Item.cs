@@ -1,39 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class Item : MonoBehaviour
 {
+    public CustomizationType customType = CustomizationType.Item;
+
     public ItemInfo itemInfo;
+    [ShowIf("customType", CustomizationType.Item)]
     public int rotation = 0;
     public int style = 0;
+    [ShowIf("customType", CustomizationType.Item)]
     public Item surface;
+    [ShowIf("customType", CustomizationType.Item)]
     public List<Item> itemsOnSurface = new List<Item>();
+    [ShowIf("customType", CustomizationType.Item)]
     public float itemPickupProgress = 0;
     public bool selected = false;
 
     private void Start()
     {
-        GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
-        GetComponent<Renderer>().material.SetColor("_Color", Color.clear);
+        if (customType == CustomizationType.Item)
+        {
+            GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
+            GetComponent<Renderer>().material.SetColor("_Color", Color.clear);
+        }
     }
 
     public virtual void OnMouseDown()
     {
-        if (!GameManager.current.inEditMode) { return; }
+        if (!DesignManager.current.inEditMode) { return; }
 
         if (!UIHoverListener.current.isUIOverride)
         {
-            StartFilling();
             DesignManager.current.SelectItem(this);
-            Highlight(Color.white);
+            foreach (Item item in Item.FindObjectsOfType<Item>())
+            {
+                item.Highlight(Color.clear);
+            }
+
+            if (customType == CustomizationType.Item)
+            {
+                StartFilling();
+                Highlight(Color.white);
+            }
             selected = true;
         }
     }
 
     public virtual void OnMouseUp()
     {
-        if (!GameManager.current.inEditMode) { return; }
+        if (!DesignManager.current.inEditMode || customType != CustomizationType.Item) { return; }
 
         if (!UIHoverListener.current.isUIOverride)
         {
@@ -43,7 +61,7 @@ public class Item : MonoBehaviour
 
     public virtual void OnMouseEnter()
     {
-        if (!GameManager.current.inEditMode) { return; }
+        if (!DesignManager.current.inEditMode || customType != CustomizationType.Item) { return; }
 
         Debug.Log("entered" + gameObject.name);
         if (!DesignManager.current.placementTool.gameObject.activeInHierarchy)
@@ -52,13 +70,14 @@ public class Item : MonoBehaviour
             if (!selected)
             {
                 Highlight(Color.yellow);
+                AudioManager.current.PlaySoundEffect("pickUpItem-Stardew");
             }
         }
     }
 
     public virtual void OnMouseExit()
     {
-        if (!GameManager.current.inEditMode) { return; }
+        if (!DesignManager.current.inEditMode || customType != CustomizationType.Item) { return; }
 
         Debug.Log("exit" + gameObject.name);
         if (!DesignManager.current.placementTool.gameObject.activeInHierarchy)
@@ -80,13 +99,16 @@ public class Item : MonoBehaviour
     {
         style = newStyle;
         GetComponent<SpriteRenderer>().sprite = itemInfo.itemStyles[newStyle].sprites[rotation];
-        if (rotation == 1)
+        if (customType == CustomizationType.Item)
         {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
+            if (rotation == 1)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
     }
 
@@ -104,7 +126,6 @@ public class Item : MonoBehaviour
 
     public IEnumerator _Fill()
     {
-        Debug.Log("ya");
         while (itemPickupProgress < 1)
         {
             itemPickupProgress += 0.015f;
@@ -116,7 +137,6 @@ public class Item : MonoBehaviour
 
     public IEnumerator _Unfill()
     {
-        Debug.Log("no");
         while (itemPickupProgress > 0)
         {
             itemPickupProgress -= 0.05f;
@@ -127,9 +147,11 @@ public class Item : MonoBehaviour
 
     public void Highlight(Color outlineColor)
     {
-        Debug.Log("ran");
-        GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
-        GetComponent<Renderer>().material.SetColor("_Color", outlineColor);
+        if (customType == CustomizationType.Item)
+        {
+            GetComponent<Renderer>().material.SetFloat("_Thickness", 0.01f);
+            GetComponent<Renderer>().material.SetColor("_Color", outlineColor);
+        }
     }
 
     /*public IEnumerator Highlight()
