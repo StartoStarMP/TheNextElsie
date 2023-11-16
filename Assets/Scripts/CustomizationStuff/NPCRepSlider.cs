@@ -23,6 +23,8 @@ public class NPCRepSlider : MonoBehaviour
         addedPointsText.text = "+ " + pointsToAdd.ToString();
         addedPointsAnim.SetTrigger("add");
         StartCoroutine(AdjustSlider(pointsToAdd));
+
+        //PLAY SOUND EFFECT ADD REP
     }
 
     public void SetSlider()
@@ -40,7 +42,15 @@ public class NPCRepSlider : MonoBehaviour
         {
             npcCurrentRep += 1;
             npcRepRing.fillAmount = npcCurrentRep % 100 / 100f;
-            repLevel.text = (npcCurrentRep / 100).ToString();
+            if (repLevel.text == (npcCurrentRep / 100).ToString())
+            {
+
+            }
+            else
+            {
+                repLevel.text = (npcCurrentRep / 100).ToString();
+                //PLAY SOUND EFFECT REP LEVEL UP
+            }
             yield return new WaitForSeconds(0.02f);
         }
 

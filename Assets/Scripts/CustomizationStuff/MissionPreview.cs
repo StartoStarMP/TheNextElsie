@@ -39,7 +39,7 @@ public class MissionPreview : MonoBehaviour
         moneyText.text = missionInfo.missionMoney.ToString();
     }
 
-    public void OpenMissionPreview(MissionInfo missionInfo)
+    /*public void OpenMissionPreview(MissionInfo missionInfo)
     {
         missionPreviewStatus.text = "Opening...";
         GetComponent<Animator>().SetTrigger("open");
@@ -67,7 +67,7 @@ public class MissionPreview : MonoBehaviour
         missionPreviewStatus.text = "Starting...";
         UpdateMissionPreview(missionInfo);
         GetComponent<Animator>().SetTrigger("start");
-    }
+    }*/
 
     IEnumerator CaptureRoutine()
     {

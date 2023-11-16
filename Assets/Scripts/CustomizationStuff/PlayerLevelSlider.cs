@@ -36,6 +36,8 @@ public class PlayerLevelSlider : MonoBehaviour
         xpAddedText.text = "+ " + xpToAdd.ToString();
         xpAddedAnim.SetTrigger("add");
         StartCoroutine(AdjustXPSlider(xpToAdd));
+
+        //PLAY SOUND EFFECT GAIN XP
     }
 
     public IEnumerator AdjustXPSlider(int xpToAdd)
@@ -50,6 +52,8 @@ public class PlayerLevelSlider : MonoBehaviour
                 playerLevel.text = (int.Parse(playerLevel.text) + 1).ToString();
                 playerCurrentXP.value = 0;
                 finalXP -= 100;
+
+                //PLAY SOUND EFFECT LEVEL UP
             }
             yield return new WaitForSeconds(0.02f);
         }

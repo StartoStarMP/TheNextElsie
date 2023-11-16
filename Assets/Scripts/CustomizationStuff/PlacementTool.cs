@@ -51,6 +51,8 @@ public class PlacementTool : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !UIHoverListener.current.isUIOverride && (numOverlap == 0 || CheckIfSurfaceAvailable()) && selectedItem != null && placementReady)
         {
+            //PLAY SOUND EFFECT PLACE ITEM DOWN
+
             if (selectedItem.targetLayer == "RugObjects")
             {
                 GameObject newItem = Instantiate(selectedItem.itemPrefab[selectedRotation], new Vector3(transform.position.x, transform.position.y, 0.5f), transform.rotation) as GameObject;
@@ -110,6 +112,8 @@ public class PlacementTool : MonoBehaviour
             selectedRotation = 0;
         }
         SetSelectedItem(selectedItem, selectedStyle, selectedRotation);
+
+        //PLAY SOUND EFFECT ROTATE ITEM
     }
 
     public void SetSelectedItem(ItemInfo itemInfo, int styleIdx = 0, int rotation = 0)

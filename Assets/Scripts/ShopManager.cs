@@ -316,6 +316,8 @@ public class ShopManager : MonoBehaviour
 
     public void ViewPurchasableItem(ItemInfo itemInfo)
     {
+        AudioManager.current.PlaySoundEffect("bigSelect-Stardew");
+
         itemDisplayView.SetActive(true);
         itemDetailsDisplay.SetActive(true);
         itemUpgradesDisplay.SetActive(false);
@@ -396,6 +398,8 @@ public class ShopManager : MonoBehaviour
 
     public void ViewUpgradeableItem(ItemInfo itemInfo)
     {
+        //PLAY SOUND EFFECT ON PRESSING ITEM BUTTON
+
         itemDisplayView.SetActive(true);
         itemDetailsDisplay.SetActive(false);
         itemUpgradesDisplay.SetActive(true);
@@ -433,6 +437,8 @@ public class ShopManager : MonoBehaviour
 
     public void RotateItemDisplay(int view)
     {
+        //PLAY SOUND EFFECT ROTATE ITEM DISPLAY
+
         if (displayedItemInfo.customType == CustomizationType.Item)
         {
             itemImage.sprite = displayedItemInfo.itemPrefab[view].GetComponent<SpriteRenderer>().sprite;
@@ -460,6 +466,8 @@ public class ShopManager : MonoBehaviour
     {
         if (GameManager.current.playerMoney >= displayedItemInfo.cost)
         {
+            //PLAY SOUND EFFECT BUY ITEM
+
             GameManager.current.ChangePlayerMoney(-displayedItemInfo.cost);
             GameManager.current.unlockedItems.Add(displayedItemInfo);
 
@@ -479,6 +487,8 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
+            //PLAY SOUND EFFECT NOT ENOUGH MONEY
+
             Debug.LogError("Not enough money.");
         }
     }
@@ -492,6 +502,8 @@ public class ShopManager : MonoBehaviour
         shopCategoryButtons[1].image.color = Color.gray;
         shopCategoryButtons[2].image.color = Color.gray;
         SetupPurchasesDisplay();
+
+        //PLAY SOUND EFFECT SWITCH DISPLAY
     }
 
     public void DisplayReputation()
@@ -505,6 +517,8 @@ public class ShopManager : MonoBehaviour
         SetupReputationDisplay();
 
         itemDisplayView.SetActive(false);
+
+        //PLAY SOUND EFFECT SWITCH DISPLAY
     }
 
     public void DisplayInvestments()
@@ -516,6 +530,8 @@ public class ShopManager : MonoBehaviour
         shopCategoryButtons[1].image.color = Color.gray;
         shopCategoryButtons[2].image.color = Color.white;
         SetupInvestmentsDisplay();
+
+        //PLAY SOUND EFFECT SWITCH DISPLAY
     }
 
     public void SetupReputationDisplay()
@@ -701,6 +717,8 @@ public class ShopManager : MonoBehaviour
 
     public IEnumerator _Fill(Image lockOverlay, Action action)
     {
+        //PLAY SOUND EFFECT FILL
+
         while (lockOverlay.fillAmount > 0)
         {
             lockOverlay.fillAmount -= 0.01f;
@@ -711,6 +729,8 @@ public class ShopManager : MonoBehaviour
 
     public IEnumerator _Unfill(Image lockOverlay)
     {
+        //STOP PLAYING SOUND EFFECT FILL
+
         while (lockOverlay.fillAmount < 1)
         {
             lockOverlay.fillAmount += 0.05f;
@@ -720,18 +740,24 @@ public class ShopManager : MonoBehaviour
 
     public void UpgradeDiscount()
     {
+        //PLAY SOUND EFFECT UPGRADE
+
         ItemStatsManager.current.UpgradeItemDiscountTier(displayedItemInfo);
         UpdateItemUpgrades();
     }
 
     public void UpgradeQuality()
     {
+        //PLAY SOUND EFFECT UPGRADE
+
         ItemStatsManager.current.UpgradeItemQualityTier(displayedItemInfo);
         UpdateItemUpgrades();
     }
 
     public void UnlockStyle(int styleIdx)
     {
+        //PLAY SOUND EFFECT UPGRADE
+
         ItemStatsManager.current.UnlockStyle(displayedItemInfo, styleIdx);
         UpdateItemUpgrades();
     }

@@ -116,12 +116,16 @@ public class Item : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(_Fill());
+
+        AudioManager.current.PlaySoundEffect("toolCharge-Stardew");
     }
 
     public void StopFilling()
     {
         StopAllCoroutines();
         StartCoroutine(_Unfill());
+
+        AudioManager.current.StopSoundEffect("toolCharge-Stardew");
     }
 
     public IEnumerator _Fill()

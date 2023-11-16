@@ -31,6 +31,8 @@ public class PlayerMoneyCounter : MonoBehaviour
         moneyAddedText.text = moneyToAdd.ToString();
         moneyAddedAnim.SetTrigger("add");
         StartCoroutine(AdjustMoney(moneyToAdd));
+
+        //PLAY SOUND EFFECT MONEY ADD/SUBTRACT
     }
 
     public IEnumerator AdjustMoney(int moneyToAdd)

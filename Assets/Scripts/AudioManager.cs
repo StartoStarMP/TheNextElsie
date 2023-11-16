@@ -92,6 +92,24 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void StopSoundEffect(string clipName)
+    {
+        if (clipName != null)
+        {
+            if (soundEffectPlayer.clip.name == clipName)
+            {
+                soundEffectPlayer.Stop();
+            }
+        }
+        else
+        {
+            if (soundEffectPlayer.isPlaying)
+            {
+                soundEffectPlayer.Stop();
+            }
+        }
+    }
+
     public void AddToSoundEffectHistory(AudioClip soundEffect)
     {
         while (SEHistorySEs.Count >= 5)

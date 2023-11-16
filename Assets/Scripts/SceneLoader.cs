@@ -132,12 +132,16 @@ public class SceneLoader : MonoBehaviour
             Debug.Log("ran in");
             GetComponent<Animator>().SetTrigger("locationChangeIn");
             locationChangeActive = true;
+
+            //PLAY SOUND EFFECT LOCATION CHANGE IN
         }
         else
         {
             Debug.Log("ran out");
             GetComponent<Animator>().SetTrigger("locationChangeOut");
             locationChangeActive = false;
+
+            //PLAY SOUND EFFECT LOCATION CHANGE OUT
         }
     }
 
@@ -155,6 +159,8 @@ public class SceneLoader : MonoBehaviour
             selectedLocationIdx = ListOffset(selectedLocationIdx, locationIconSprites.Count, -1);
             SelectLocation(selectedLocationIdx, false);
         }
+
+        //PLAY SOUND EFFECT SCROLL LOCATION
     }
 
     public void SelectLocation(int idx = 0, bool up = true)
@@ -194,6 +200,8 @@ public class SceneLoader : MonoBehaviour
         }
 
         SetLocationChangeMenu(false);
+
+        //PLAY SOUND EFFECT SELECT LOCATION
 
         StartCoroutine(Timer(x => LoadScene(locationNames[selectedLocationIdx], LoadingScreenType.BlackScreen), 0.5f));
     }
@@ -243,6 +251,8 @@ public class SceneLoader : MonoBehaviour
 
     public void OpenMissionPreview(MissionInfo missionInfo)
     {
+        //PLAY SOUND EFFECT OPEN MISSION PREVIEW
+
         missionPreviewStatus.text = "Opening...";
         GetComponent<Animator>().SetTrigger("missionPreviewOpen");
         UpdateMissionPreview(missionInfo);
@@ -251,12 +261,16 @@ public class SceneLoader : MonoBehaviour
 
     public void CloseMissionPreview()
     {
+        //PLAY SOUND EFFECT CLOSE MISSION PREVIEW
+
         missionPreviewStatus.text = "Closing...";
         GetComponent<Animator>().SetTrigger("missionPreviewClose");
     }
 
     public void AcceptMission()
     {
+        //PLAY SOUND EFFECT ACCEPT MISSION PREVIEW
+
         GetComponent<Animator>().SetTrigger("missionPreviewAccept");
 
         StartCoroutine(Timer(x => GameManager.current.currentMission = currentMissionInfo, 1.25f));

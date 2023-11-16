@@ -88,6 +88,8 @@ public class EvaluationManager : MonoBehaviour
 
     public IEnumerator _Fill()
     {
+        AudioManager.current.PlaySoundEffect("toolCharge-Stardew");
+
         while (certifiedIcon.fillAmount < 1)
         {
             certifiedIcon.fillAmount += 0.015f;
@@ -95,10 +97,14 @@ public class EvaluationManager : MonoBehaviour
         }
         finishButtonOn = false;
         StartCoroutine(GatherPointsBreakdown());
+
+        AudioManager.current.PlaySoundEffect("questComplete-Stardew");
     }
 
     public IEnumerator _Unfill()
     {
+        AudioManager.current.StopSoundEffect("toolCharge-Stardew");
+
         while (certifiedIcon.fillAmount > 0)
         {
             certifiedIcon.fillAmount -= 0.05f;
@@ -108,6 +114,8 @@ public class EvaluationManager : MonoBehaviour
 
     public IEnumerator StartPointsBreakdown()
     {
+        //PLAY MUSIC DRUMROLL
+
         for (int i = 0; i < breakdownList.Count; i++)
         {
             breakdownText.text = breakdownList[i] + " + " + pointList[i];
@@ -140,41 +148,62 @@ public class EvaluationManager : MonoBehaviour
             }
 
             evaluationAnim.SetTrigger("bounce");
+
+            AudioManager.current.PlaySoundEffect("jingle1-Stardew");
             yield return new WaitForSeconds(1f);
         }
 
         evaluationAnim.SetTrigger("rankReveal");
+        AudioManager.current.PlaySoundEffect("cast-Stardew");
         yield return new WaitForSeconds(0.5f);
         confetti.Play();
+
+        AudioManager.current.PlaySoundEffect("drumkit0-Stardew");
+
         if (evaluationSlider.value < 200)
         {
             rankLevel = 0;
             flairText.text = "Awful...";
             starsRank.sprite = starRankSprites[0];
+
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.current.PlaySoundEffect("Game Over...-SuperKirbyClash");
         }
         else if (evaluationSlider.value < 400)
         {
             rankLevel = 1;
             flairText.text = "Ok...";
             starsRank.sprite = starRankSprites[1];
+
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.current.PlaySoundEffect("Level Up! -SuperKirbyClash");
         }
         else if (evaluationSlider.value < 600)
         {
             rankLevel = 2;
             flairText.text = "Great!";
             starsRank.sprite = starRankSprites[2];
+
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.current.PlaySoundEffect("Heroic Mission Cleared!-SuperKirbyClash");
         }
         else if (evaluationSlider.value < 800)
         {
             rankLevel = 3;
             flairText.text = "Amazing!";
             starsRank.sprite = starRankSprites[3];
+
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.current.PlaySoundEffect("Medal Awarded-SuperKirbyClash");
         }
         else if (evaluationSlider.value == 800)
         {
             rankLevel = 4;
             flairText.text = "PERFECT!!!";
             starsRank.sprite = starRankSprites[4];
+
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.current.PlaySoundEffect("Max Level Reached!-SuperKirbyClash");
         }
     }
 
@@ -187,6 +216,9 @@ public class EvaluationManager : MonoBehaviour
     {
         forwardRecapButton.interactable = false;
         recapPhase += 1;
+
+        AudioManager.current.PlaySoundEffect("brush-Stardew");
+
         //SHOW SCORE BREAKDOWN
         if (recapPhase == 1)
         {

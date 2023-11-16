@@ -360,6 +360,8 @@ public class DesignManager : MonoBehaviour
                 itemButton.gameObject.SetActive(true);
             }
         }
+
+        AudioManager.current.PlaySoundEffect("smallSelect-Stardew");
     }
 
     public void ScrollCategory(string type)
@@ -390,6 +392,8 @@ public class DesignManager : MonoBehaviour
         categoryName.text = categoryStrings[currentCategory];
         categoryImage.sprite = categorySprites[currentCategory];
         SelectCategory(currentCategory);
+
+        AudioManager.current.PlaySoundEffect("brush-Stardew");
     }
 
     public void StartPlacementTool(ItemInfo itemInfo, int styleIdx = 0, int rotationIdx = 0, bool limitedUse = false)
@@ -404,6 +408,15 @@ public class DesignManager : MonoBehaviour
         placementTool.SetSelectedItem(itemInfo, styleIdx, rotationIdx);
         placementText.gameObject.SetActive(true);
         StartCoroutine(placementTool.GetComponent<PlacementTool>().DelayPlacement());
+
+        if (limitedUse)
+        {
+            AudioManager.current.PlaySoundEffect("coin-Stardew");
+        }
+        else
+        {
+            AudioManager.current.PlaySoundEffect("smallSelect-Stardew");
+        }
     }
 
     public void SelectItem(Item item)
@@ -459,8 +472,6 @@ public class DesignManager : MonoBehaviour
 
         StartPlacementTool(item.itemInfo, item.style, item.rotation, true);
         RemoveItem(item);
-
-        AudioManager.current.PlaySoundEffect("coin-Stardew");
     }
 
     public void RemoveItem(Item item)
@@ -512,6 +523,8 @@ public class DesignManager : MonoBehaviour
 
         wall.GetComponent<Item>().itemInfo = itemInfo;
         wall.GetComponent<Item>().style = style;
+
+        AudioManager.current.PlaySoundEffect("axchop-Stardew");
     }
 
     public void ChangeFloorTiles(Button button, ItemInfo itemInfo, int style = 0)
@@ -528,6 +541,8 @@ public class DesignManager : MonoBehaviour
 
         floor.GetComponent<Item>().itemInfo = itemInfo;
         floor.GetComponent<Item>().style = style;
+
+        AudioManager.current.PlaySoundEffect("harvest-Stardew");
     }
 
     public void AdjustBudget(int amount)
@@ -724,6 +739,8 @@ public class DesignManager : MonoBehaviour
             selectedItem.SelectStyle(styleIdx);
             ShowItemContext(selectedItem);
         }
+
+        AudioManager.current.PlaySoundEffect("tinyWhip-Stardew");
     }
 
     public void HideItemContext()
