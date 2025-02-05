@@ -51,6 +51,24 @@ public class GameManager : MonoBehaviour
         return availableItems;
     }
 
+    public List<CategoryType> GetAvailableCategories()
+    {
+        List<CategoryType> availableCategories = new List<CategoryType>();
+
+        foreach (ItemInfo item in unlockedItems)
+        {
+            foreach (CategoryType categoryType in item.categoryTypes)
+            {
+                if (!availableCategories.Contains(categoryType))
+                {
+                    availableCategories.Add(categoryType);
+                }
+            }
+        }
+
+        return availableCategories;
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void RuntimeInit()
     {

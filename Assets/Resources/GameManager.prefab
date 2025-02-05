@@ -48,7 +48,6 @@ MonoBehaviour:
   playerXP: 120
   playerMoney: 50
   npcReps: 5e010000fa00000096000000c201000026020000
-  inEditMode: 0
   unlockedItems:
   - {fileID: 11400000, guid: cd1a29110bd7c6147b0ce1021aa0d297, type: 2}
   - {fileID: 11400000, guid: 4dddc78bb78f8c5488288d9003b8815f, type: 2}
@@ -78,13 +77,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f31c091e85fb82843bdc05318a4a3ece, type: 2}
   - {fileID: 11400000, guid: f538fd4c8b58f334a8b56f6fc1bb29a3, type: 2}
   - {fileID: 11400000, guid: b914298a1aa9e2b468df8ffbc6a3edc1, type: 2}
-  lockedItems:
   - {fileID: 11400000, guid: 0eccf68510678bf43bebb3145573f726, type: 2}
   - {fileID: 11400000, guid: a16dcac2ddfbddb4bbeef26a8de4965a, type: 2}
   - {fileID: 11400000, guid: 87ffacba180a72e4a80bf5dedcff43d8, type: 2}
   - {fileID: 11400000, guid: 6b1579dfca29d334f974074600f564fc, type: 2}
-  - {fileID: 11400000, guid: e368967f997c75b4ea5fc8d53c3441c9, type: 2}
   - {fileID: 11400000, guid: f3b138b0ad1b36a44adf84848dca8177, type: 2}
+  - {fileID: 11400000, guid: e368967f997c75b4ea5fc8d53c3441c9, type: 2}
+  lockedItems:
+  - {fileID: 11400000, guid: ca1df7950f6d6ea4cb346763d0eda832, type: 2}
 --- !u!114 &6373134236027370702
 MonoBehaviour:
   m_ObjectHideFlags: 0

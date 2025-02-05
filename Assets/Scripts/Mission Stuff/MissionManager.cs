@@ -132,7 +132,9 @@ public class MissionManager : MonoBehaviour
             }
             else if (newRequirement.reqType == RequirementType.CategoryType)
             {
-                newRequirement.categoryType = (CategoryType)Random.Range(0, (int)System.Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().Max());
+                List<CategoryType> availableCategories = GameManager.current.GetAvailableCategories();
+
+                newRequirement.categoryType = (CategoryType)Random.Range(0, availableCategories.Count);
                 newRequirement.categoryTypeCount = Random.Range(1, 3);
             }
             else if (newRequirement.reqType == RequirementType.RoomType)
@@ -158,7 +160,7 @@ public class MissionManager : MonoBehaviour
 
         //GENERATE BLUEPRINT REWARD
         float chance = Random.Range(0,1f);
-        if (chance <= 0.33)
+        if (chance <= 0.33f)
         {
             int randItem = Random.Range(0, GameManager.current.lockedItems.Count);
             newMission.itemBlueprint = GameManager.current.lockedItems[randItem];
